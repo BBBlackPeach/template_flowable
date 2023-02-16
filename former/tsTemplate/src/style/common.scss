@@ -1,0 +1,57 @@
+.layout{
+    position: relative;
+    min-height: calc(100vh - 260px);
+    background-color: #ffffff;
+    margin: 15px 15px 0 15px;
+    height: 82vh
+}
+
+.centerCommon{
+    display: flex;
+    justify-content: center;
+}
+
+.headerGroup {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 1.5% 0;
+}
+
+.leftButton {
+    align-self: center;
+    display: flex;
+    float: left;
+    margin-left: 1%;
+}
+
+.searchInput {
+    /* margin: 1% 15% 1% 0%;
+  align-self: center;
+  width: 68% */
+    margin: 0% 5% 0% 5%;
+    align-self: center;
+    width: 100%
+        /* margin: 1% 15%;
+  align-self: center;
+  width: 70% */
+}
+
+.rightButton {
+    align-self: center;
+    display: flex;
+    float: right;
+    margin-right: 1%;
+}
+
+.tableGroup {
+    margin: auto;
+}
+
+.paginationGroup {
+    padding: 1% 0;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+}
