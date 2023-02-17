@@ -1,12 +1,20 @@
 <template>
   <div class="header-layout">
-    <div class="header-layout-icon" @click="clickCollapse">
-      <el-icon v-if="collapseTF">
-        <Expand />
-      </el-icon>
-      <el-icon v-else>
-        <Fold />
-      </el-icon>
+    <div class="justifyCenterGroup" @click="clickCollapse">
+      <div class="header-layout-icon">
+        <el-icon v-if="collapseTF" size="26">
+          <Expand />
+        </el-icon>
+        <el-icon v-else size="26">
+          <Fold />
+        </el-icon>
+      </div>
+      <div class="header-layout-breadcrumb">
+        <el-breadcrumb :separator-icon="ArrowRight">
+          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: 1.8vh;font-weight: bolder;">{{ item
+          }}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
     </div>
     <div>
       <strong>SJ小区物业管理系统</strong>
@@ -124,8 +132,8 @@
   <el-dialog v-model="avatarDialogFlag" title="头像预览" width="32%" draggable center :before-close="closeAvatarDialog">
     <ul ref="updateDialogTop" style="overflow: auto;height:32vh;padding: 0;">
       <div class="centerCommon">
-        <el-upload ref="uploadAvatarRef" :limit="1" :action="`${baseURL}/photo/addPhoto`"
-          :on-remove="updateHandleRemove" :on-success="updateHandlePhotoSuccess" style="line-height: 2.1vh;">
+        <el-upload ref="uploadAvatarRef" :limit="1" :action="`${baseURL}/photo/addPhoto`" :on-remove="updateHandleRemove"
+          :on-success="updateHandlePhotoSuccess" style="line-height: 2.1vh;">
           <div class="centerCommon">
             <el-image :src="previewPhoto == '' || previewPhoto == null ? null : previewPhoto"
               style="width: 23vh; height: 23vh; border-radius: 50%" />
@@ -225,7 +233,7 @@
         <el-row v-show="activeStep == 1 && switchWayFlag == 1">
           <el-col :span="18">
             <el-form-item label="原密码" prop="oldPassword" :rules="[
-            { required: true, message: '请输入原密码', trigger: ['change'] }]">
+              { required: true, message: '请输入原密码', trigger: ['change'] }]">
               <el-input v-model="UpdateUserPassword.oldPassword" size="large" />
             </el-form-item>
           </el-col>
@@ -233,7 +241,7 @@
         <el-row v-show="activeStep == 1 && switchWayFlag == 2">
           <el-col :span="18">
             <el-form-item label="姓名" prop="nickName" :rules="[
-            { required: true, message: '请输入姓名', trigger: ['change'] }]">
+              { required: true, message: '请输入姓名', trigger: ['change'] }]">
               <el-input v-model="UpdateUserPassword.nickName" size="large" />
             </el-form-item>
           </el-col>
@@ -241,19 +249,18 @@
         <el-row v-show="activeStep == 1 && switchWayFlag == 2">
           <el-col :span="18">
             <el-form-item label="身份证号" prop="identity" :rules="[
-            { required: true, message: '请输入身份证号', trigger: ['change'] }]">
+              { required: true, message: '请输入身份证号', trigger: ['change'] }]">
               <el-input type="number" v-model="UpdateUserPassword.identity" size="large" />
             </el-form-item>
           </el-col>
         </el-row>
-        <div v-show="activeStep == 1" class="centerCommon" style="line-height: 1.7vh;color: #40a6fa;"
-          @click="switchWay">
+        <div v-show="activeStep == 1" class="centerCommon" style="line-height: 1.7vh;color: #40a6fa;" @click="switchWay">
           点击切换验证方式
         </div>
         <el-row v-show="activeStep == 2">
           <el-col :span="18">
             <el-form-item label="新密码" prop="firstPassword" :rules="[
-            { required: true, message: '请输入新密码', trigger: ['change'] }]">
+              { required: true, message: '请输入新密码', trigger: ['change'] }]">
               <el-input v-model="UpdateUserPassword.firstPassword" size="large" />
             </el-form-item>
           </el-col>
@@ -261,7 +268,7 @@
         <el-row v-show="activeStep == 2">
           <el-col :span="18">
             <el-form-item label="再次输入密码" prop="secondPassword" :rules="[
-            { required: true, message: '请再次输入密码', trigger: ['change'] }]">
+              { required: true, message: '请再次输入密码', trigger: ['change'] }]">
               <el-input v-model="UpdateUserPassword.secondPassword" size="large" />
             </el-form-item>
           </el-col>
@@ -277,13 +284,12 @@
       </span>
     </template>
   </el-dialog>
-
 </template>
 
 <script setup lang="ts">
 import { deletePhotoApi } from '@/api/photo';
 import { baseURL } from '@/utils/url';
-import { Edit } from "@element-plus/icons-vue";
+import { ArrowRight, Edit } from "@element-plus/icons-vue";
 import { ElMessageBox, ElMessage, UploadProps, UploadInstance, FormInstance, FormRules } from 'element-plus';
 import { getUserByNickApi, checkUserNameApi, updateOwnInfoApi, checkOldPasswordApi, checkUserInfoApi, updatePasswordApi } from '@/api/user'
 import useRouterStore from '@/store/router';
@@ -299,6 +305,20 @@ const userInfoStore = useUserStore();
 const loadingStore = useLoadingStore();
 const { collapseTF } = storeToRefs(menuStore);
 const { userInfo } = storeToRefs(userInfoStore);
+
+
+// 面包屑
+const route = useRoute();
+const breadcrumbPath = computed(() => {
+  let result = [];
+  route.matched.forEach((path) => {
+    const index = result.findIndex((e) => e == path.name);
+    if (index == -1) {
+      result.push(path.name);
+    }
+  })
+  return result;
+});
 
 // 抽屉
 const drawerFlag = ref(false)
@@ -754,10 +774,16 @@ const closePasswordDialog = () => {
   justify-content: space-between;
 
   .header-layout-icon {
-    i {
-      font-size: 22px;
-      cursor: pointer;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .header-layout-breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1vw;
   }
 
   .avatar-group {
