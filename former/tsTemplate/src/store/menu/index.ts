@@ -46,7 +46,6 @@ const useMenuStore = defineStore('useMenuStore', () => {
         // 第二种比较写法
         const index = tabs.value.findIndex((e) => e.name == tabName);
         // const index = tabs.indexOf(tabName);
-        console.log(index);
         if (index != -1) {
             tabs.value.splice(index, 1);
             return true;
