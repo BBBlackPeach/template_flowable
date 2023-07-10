@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-
+/**
+ * @author 陶祎祎
+ */
 @TableName("sys_log")
 @Data
 public class SysLog extends BaseModel {
@@ -23,8 +25,5 @@ public class SysLog extends BaseModel {
     private Long time;
 
     private String ip;
-
-
-
 
 }

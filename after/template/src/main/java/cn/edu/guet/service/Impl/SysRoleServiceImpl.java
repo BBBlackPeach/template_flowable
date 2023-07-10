@@ -19,7 +19,6 @@ import java.util.List;
 
 import static cn.edu.guet.util.ImageUtils.deleteImages;
 
-
 /**
  * @author 陶祎祎
  */

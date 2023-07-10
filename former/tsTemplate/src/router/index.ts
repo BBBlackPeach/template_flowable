@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
 import useRouterStore from '@/store/router';
+import { storeToRefs } from 'pinia';
 
 const Layout = () => import('@/layout/Home.vue')
 const routes: Array<RouteRecordRaw> = [
@@ -110,9 +111,11 @@ export const setRoutes = (userMenuList) => {
 
 // 移除动态添加的路由
 export const removeRoutes = () => {
-    const navTreeStorage = JSON.parse(sessionStorage.getItem('routerInfo'));
-    if (navTreeStorage.routerList) {
-        navTreeStorage.routerList.map((e) => {
+    const routerStore = useRouterStore();
+    const { routerList } = storeToRefs(routerStore);
+    if (routerList.value != null) {
+        console.log(routerList);
+        routerList.value.map((e) => {
             router.removeRoute(e.name);
         })
     }
@@ -126,8 +129,9 @@ router.beforeEach((to, from, next) => {
     }
     else if (from.name == null) {
         if (router.getRoutes().length <= 2) {
-            const navTreeStorage = JSON.parse(sessionStorage.getItem('routerInfo'));
-            setRoutes(navTreeStorage.routerList);
+            const routerStore = useRouterStore();
+            const { routerList } = storeToRefs(routerStore);
+            setRoutes(routerList.value);
             // 如果 addRoute 并未完成，路由守卫会一层一层的执行执行，直到 addRoute 完成，找到对应的路由
             next({ path: to.path, replace: true });
         } else {
@@ -135,30 +139,8 @@ router.beforeEach((to, from, next) => {
         }
     }
     else {
-        // 发送请求获取该用户拥有的菜单路由
-        // const routerStore = useRouterStore();
-        // if (routerStore.routerList == null || routerStore.routerList.length == 0) {
-        //     console.log("我发送的");
-        //     const userStore = useUserStore();
-        //     let navTree = await getMenuTreeApi(userStore.userInfo.name);
-        //     setRoutes(navTree.data);
-        //     routerStore.setRouterList(navTree.data);
-        //     next();
-        // } else {
         next()
-        // }
     }
-    // //如果访问的是需要登录权限的界面，需要获取token
-    // const token = JSON.parse(localStorage.getItem("user"));
-    // if (!token && to.path == '/home') {
-    //     return next("/login")
-    // } else if (!token) {
-    //     alert("请先登录")
-    //     return next("/login")
-    // }
-    // //将当前路由的路径和名称进行修改
-    // store.commit("SETPATH", [to.path, to.name])
-    // next()
 })
 
 // 后置路由守卫

@@ -10,14 +10,14 @@
                                     <span class="card-img">
                                         <el-image
                                             :src="userInfo.avatar == '' || userInfo.avatar == null ? null : userInfo.avatar"
-                                            style="width: 68px; height: 68px; border-radius: 50%" />
+                                            style="width: 4.25rem; height: 4.25rem; border-radius: 50%" />
                                     </span>
                                 </el-col>
                                 <el-col :xs="20" :md="20" :lg="20">
                                     <div class="text">
-                                        <h4>
+                                        <span>
                                             您好，{{ userInfo.nickName }}，请开始您一天的工作吧！
-                                        </h4>
+                                        </span>
                                     </div>
                                 </el-col>
                             </div>
@@ -57,7 +57,7 @@
                 </el-col> -->
             </el-row>
         </el-card>
-        <el-card style="margin: 20px 0">
+        <el-card style="margin: 1.25rem 0">
             <div class="shadow">
                 <el-row :gutter="20">
                     <el-col v-for="(menuItem, key) in indexMenuList" :key="key" :span="4" :xs="8"
@@ -113,23 +113,23 @@ const toTarget = (name) => {
         overflow: hidden;
 
         .car-left {
-            height: 68px;
+            height: 4.25rem;
         }
 
         .car-right {
-            height: 68px;
+            height: 4.25rem;
 
             .flow,
             .user-number,
             .feedback {
-                width: 24px;
-                height: 24px;
+                width: 1.5rem;
+                height: 1.5rem;
                 display: inline-block;
                 border-radius: 50%;
-                line-height: 24px;
+                line-height: 1.5rem;
                 text-align: center;
-                font-size: 13px;
-                margin-right: 5px;
+                font-size: 0.875rem;
+                margin-right: 0.375rem;
             }
 
             .flow {
@@ -160,48 +160,49 @@ const toTarget = (name) => {
         }
 
         .card-img {
-            width: 68px;
-            height: 68px;
+            width: 4.25rem;
+            height: 4.25rem;
             float: left;
             overflow: hidden;
         }
 
         .text {
-            height: 68px;
-            margin-left: 80px;
+            height: 4.25rem;
+            margin-left: 5rem;
 
-            h4 {
-                font-size: 20px;
+            span {
+                font-size: 1.25rem;
                 color: #262626;
                 font-weight: 500;
                 white-space: nowrap;
                 word-break: break-all;
                 text-overflow: ellipsis;
-                margin: 10px;
+                margin: 0.625rem;
             }
 
             .tips-text {
                 color: #8c8c8c;
-                margin-top: 10px;
+                margin-top: 0.625rem;
             }
         }
     }
 
     .shadow {
-        margin: 4px 0;
+        margin: 0.25rem 0;
 
         .grid-content {
             text-align: center;
-            padding: 10px 0;
+            padding: 0.625rem 0;
             cursor: pointer;
 
             .el-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 36px;
-                margin-bottom: 8px;
+                width: 2.25rem;
+                height: 2.25rem;
+                font-size: 2.25rem;
+                margin-bottom: 0.5rem;
             }
         }
     }
 }
 </style>
+

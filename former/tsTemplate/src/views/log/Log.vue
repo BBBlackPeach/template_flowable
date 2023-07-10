@@ -3,7 +3,7 @@
 
         <!-- 搜索框和按钮 -->
         <div class="headerGroup">
-            <el-button class="leftButton" v-perms="['sys:log:delete']" :icon="Delete" type="danger"
+            <el-button class="leftButton" v-perms="['sys:log:delete']" icon="Delete" type="danger"
                 @click="openSevenDeleteDialog">
                 删除7天前的日志
             </el-button>
@@ -21,7 +21,7 @@
                 width="160" />
             <el-table-column align="center" label="操作" width="100" fixed="right">
                 <template #default="scope">
-                    <el-button v-perms="['sys:log:delete']" :icon="Delete" size="default" type="danger"
+                    <el-button v-perms="['sys:log:delete']" icon="Delete" size="default" type="danger"
                         @click="openDeleteDialog(scope.row.id)">
                         删除
                     </el-button>
@@ -32,16 +32,14 @@
         <!-- 分页器 -->
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[20, 30, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="getTableData"
-                @current-change="getTableData" />
+                :page-sizes="[20, 30, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="getTableData" @current-change="getTableData" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import useLoadingStore from "@/store/loading";
-import { Delete } from "@element-plus/icons-vue";
 import { ElTable, ElMessage, ElMessageBox } from 'element-plus';
 import { getLogListApi, deleteLogApi, sevenDayDeleteApi } from "@/api/log";
 import { conversionDateTime } from "@/utils/timeFormat"
@@ -130,18 +128,17 @@ const sendSevenDeleteLog = () => {
     loadingStore.setLoadingT();
     sevenDayDeleteApi().then(res => {
         loadingStore.setLoadingF();
-        if (res.data >= 1) {
-            ElMessage({
-                message: '删除日志成功！',
-                type: 'success',
-            })
-            getTableData();
-        }
-        else {
+        if (res.data = 0) {
             ElMessage({
                 message: '删除日志失败！',
                 type: 'error',
                 duration: 4000
+            })
+        }
+        else {
+            ElMessage({
+                message: res.msg,
+                type: 'success',
             })
         }
     })

@@ -1,6 +1,5 @@
 package cn.edu.guet.aspect;
 
-
 import cn.edu.guet.bean.SysLog;
 import cn.edu.guet.service.SysLogService;
 import cn.edu.guet.util.HttpUtils;
@@ -20,9 +19,7 @@ import java.util.Date;
 
 /**
  * 系统日志，切面处理类，记录日志
- *
- * @Author Liwei
- * @Date 2021-08-17 06:50
+ * @author 陶祎祎
  */
 @Aspect
 @Component

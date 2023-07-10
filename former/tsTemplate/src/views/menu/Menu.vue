@@ -85,8 +85,8 @@
                                 <el-select v-model="NewMenuData.parentId" placeholder="下拉选择" size="large">
                                     <el-option v-show="NewMenuData.type == '1'" v-for="item in catalogueData"
                                         :key="item.value" :label="item.label" :value="item.value" />
-                                    <el-option v-show="NewMenuData.type == '2'" v-for="item in menuData"
-                                        :key="item.value" :label="item.label" :value="item.value" />
+                                    <el-option v-show="NewMenuData.type == '2'" v-for="item in menuData" :key="item.value"
+                                        :label="item.label" :value="item.value" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -117,7 +117,7 @@
                     <el-row v-show="NewMenuData.type != '2'" justify="center">
                         <el-col :span="16">
                             <el-form-item label="图标" prop="icon">
-                                <el-input v-model="NewMenuData.icon" size="large" />
+                                <ELIconPicker :icon-value="NewMenuData.icon" @updateIcon="updateIcon"></ELIconPicker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -153,8 +153,7 @@
         </el-dialog>
 
         <!-- 更新窗口 -->
-        <el-dialog v-model="updateDialogFlag" title="修改菜单" width="40%" draggable center
-            :before-close="closeUpdateDialog">
+        <el-dialog v-model="updateDialogFlag" title="修改菜单" width="40%" draggable center :before-close="closeUpdateDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:398px;padding: 0;">
                 <!-- 282 -->
                 <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="80px"
@@ -375,6 +374,10 @@ const openAddDialog = () => {
     addDialogFlag.value = true
 }
 
+const updateIcon = (v: any) => {
+    console.log(v);
+    NewMenuData.icon = v;
+}
 
 // 新增窗口：提交状态验证
 const getAddSubmit = () => {

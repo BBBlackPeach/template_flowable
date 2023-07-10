@@ -1,11 +1,13 @@
+// 界面统一样式
 .layout{
     position: relative;
-    min-height: calc(100vh - 260px);
+    min-height: calc(100vh - 16.25rem);
     background-color: #ffffff;
-    margin: 15px 15px 0 15px;
+    margin: 1rem 1rem 0 1rem;
     height: 82vh
 }
 
+// 水平居中
 .centerCommon{
     display: flex;
     justify-content: center;
@@ -55,3 +57,14 @@
     display: flex;
     flex-direction: row;
 }
+
+.imagePlaceholderSlot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-secondary);
+    font-size: 100%;
+  }

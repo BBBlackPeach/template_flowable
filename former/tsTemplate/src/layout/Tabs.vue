@@ -54,21 +54,7 @@ const clickTab = (target) => {
 
 // 此处仍有问题，若是回退，无法转化，暂无解决办法，只好限制回退
 onMounted(() => {
-  const menuStorage = JSON.parse(sessionStorage.getItem('menuInfo'));
-  if (menuStorage != null) {
-    // 刷新界面所致或，退出又重新登录所致
-    if (menuStorage.tabs.length != 0) {
-      menuStorage.tabs.map((tab) => {
-        menuStore.addTabs(tab.name);
-      })
-      menuStore.setCollapse(menuStorage.collapseTF);
-      menuStore.setCurrentTab(menuStorage.currentTab);
-      // }
-    } else {
-      menuStore.addTabs("首页");
-      menuStore.setCurrentTab("首页");
-    }
-  } else {
+  if (menuStore.tabs.length == 0 && menuStore.currentTab == undefined) {
     menuStore.addTabs("首页");
     menuStore.setCurrentTab("首页");
   }

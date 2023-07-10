@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
  * 1、设置身份验证组件
  * 2、配置HTTP的访问规则
  * 3、注册AuthenticationManager实现类到Spring的IoC容器，以便过滤器可以注入该实例
+ * @author 陶祎祎
  */
 @Configuration
 @EnableWebSecurity

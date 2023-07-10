@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 身份验证提供者
- *
- * @Author Liwei
- * @Date 2021-08-13 17:52
+ * @author 陶祎祎
  */
 @Component
 public class JwtAuthenticationProvider extends DaoAuthenticationProvider {

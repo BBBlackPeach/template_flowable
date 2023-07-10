@@ -2,6 +2,9 @@
 
 // 引入vue中定义的指令对应的类型定义
 import { Directive } from 'vue'
+// 引入存储permission的状态管理
+import useUserStore from '@/store/user';
+import { storeToRefs } from 'pinia';
 
 export const permission: Directive = {
     // 这是指令的一个生命周期
@@ -9,15 +12,15 @@ export const permission: Directive = {
         // 获取用户使用自定义指令绑定的内容
         const { value } = binding;
         // 获取用户所有的权限
-        const permissions = [];
-        const userInfoStorage = JSON.parse(sessionStorage.getItem('userInfo'));
-        if (userInfoStorage) {
-            const uesrPermissions = userInfoStorage.permissions;
-            if (uesrPermissions && uesrPermissions != "") {
-                uesrPermissions.forEach(perm => {
-                    permissions.push(perm)
-                })
-            }
+        const userPermissions = [];
+
+        //从状态管理中获取
+        const userStore = useUserStore();
+        const { permissions } = storeToRefs(userStore);
+        if (permissions.value != null && permissions.value != "") {
+            permissions.value.forEach(perm => {
+                userPermissions.push(perm)
+            })
         }
         // JSON.parse(sessionStorage.getItem('userInfoStorage')).forEach(perm => {
         //     permissions.push(perm)
@@ -25,7 +28,7 @@ export const permission: Directive = {
         // 判断用户使用自定义指令，是否使用正确了
         if (value && value instanceof Array && value.length > 0) {
             // 判断传递进来的按钮权限，用户是否拥有
-            const hasPermission = permissions.some((per) => {
+            const hasPermission = userPermissions.some((per) => {
                 return value.includes(per)
             })
             if (!hasPermission) {

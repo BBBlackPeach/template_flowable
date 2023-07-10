@@ -93,7 +93,6 @@ public class SysUserController {
 
 //    导出excel
     @RequestMapping("/exportExcel")
-    @PreAuthorize("hasAuthority('sys:user:export')")
     public void exportExcel(HttpServletResponse response, HttpServletRequest request) throws Exception {
         ExportParamsModel sysUserExportParamsModel = (ExportParamsModel) request.getServletContext().getAttribute("sysUserExportParamsModel");
         System.out.println("拿到的全局数据:"+sysUserExportParamsModel);
@@ -155,32 +154,7 @@ public class SysUserController {
     //通过用户名获取user信息
     @GetMapping("/nickName/{name}")
     public HttpResult getUserByNick(@PathVariable("name") String name){
-        System.out.println("需要的username是："+name);
-        QueryWrapper<SysUser> query = new QueryWrapper<>();
-        query.lambda().eq(SysUser::getName,name);
-        SysUser sysUser = sysUserService.getOne(query);
-
-        if(sysUser==null){
-            return HttpResult.error("无对应信息");
-        }
-
-        //赋值roleId和roleName
-        QueryWrapper<SysUserRole> sysUserRoleQueryWrapper = new QueryWrapper<>();
-        sysUserRoleQueryWrapper.lambda().eq(SysUserRole::getUserId,sysUser.getId());
-        // SysUserRole sysUserRole = sysUserRoleService.getOne(sysUserRoleQueryWrapper);
-        List<SysUserRole> sysUserRoleList = sysUserRoleService.list(sysUserRoleQueryWrapper);
-        List<Long> roleIdList = new ArrayList<>();
-        List<String> roleNameList = new ArrayList<>();
-        for (SysUserRole sysUserRole : sysUserRoleList) {
-            QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
-            sysRoleQueryWrapper.lambda().eq(SysRole::getId,sysUserRole.getRoleId());
-            SysRole sysRole = sysRoleService.getOne(sysRoleQueryWrapper);
-            roleIdList.add(sysRole.getId());
-            roleNameList.add(sysRole.getName());
-        }
-        sysUser.setRoleId(roleIdList);
-        sysUser.setRoleNames(roleNameList);
-        return HttpResult.success("查询成功",sysUser);
+        return HttpResult.success("查询成功",sysUserService.findByName(name));
     }
 
 }

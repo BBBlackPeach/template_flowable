@@ -1,6 +1,5 @@
 package cn.edu.guet.security;
 
-
 import cn.edu.guet.bean.SysUser;
 import cn.edu.guet.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 /**
  * 用户登录认证信息查询，从数据库去加载被认证的用户信息
  * 该Bean（IoC容器管理的），带名字
- * @Author Liwei
- * @Date 2021-08-13 17:52
+ * @author 陶祎祎
  */
 @Service("UserDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {

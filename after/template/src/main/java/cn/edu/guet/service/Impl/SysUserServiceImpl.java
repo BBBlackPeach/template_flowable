@@ -13,6 +13,7 @@ import cn.edu.guet.mapper.export.SysUserExportMapper;
 import cn.edu.guet.service.SysMenuService;
 import cn.edu.guet.service.SysUserRoleService;
 import cn.edu.guet.service.SysUserService;
+import cn.edu.guet.util.DateUtils;
 import cn.edu.guet.util.PasswordUtils;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static cn.edu.guet.util.ImageUtils.deleteImages;
-
 
 /**
  * @author 陶祎祎
@@ -59,6 +59,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<SysUser> page = new Page<>(currentPage, pageSize);
         page = sysUserMapper.selectPage(page, qw);
         for (SysUser record : page.getRecords()) {
+            record.setAge(DateUtils.getAge(record.getBirthday()));
             //处理图片，形成一个图片数组
             String avatar = record.getAvatar();
 //            头像
@@ -82,6 +83,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<SysUser> page = new Page<>(currentPage, pageSize);
         page = sysUserMapper.selectPage(page, qw);
         for (SysUser record : page.getRecords()) {
+            record.setAge(DateUtils.getAge(record.getBirthday()));
             //处理图片，形成一个图片数组
             String avatar = record.getAvatar();
 //            头像
@@ -102,7 +104,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setCreateBy(SecurityUtils.getUsername());
         sysUser.setLastUpdateBy(SecurityUtils.getUsername());
         String salt = PasswordUtils.getSalt();
-        String encode = PasswordUtils.encode("123456", salt);
+        String encode = PasswordUtils.encode(sysUser.getIdentity(), salt);
         sysUser.setPassword(encode);
         sysUser.setSalt(salt);
         int result = sysUserMapper.insert(sysUser);
@@ -206,16 +208,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 //            删除该用户的角色绑定
             if(sysUserRoleMapper.delete(qw1)>=1){
-                for(int i=0;i<sysUserRoleList.size();i++){
-                    QueryWrapper<SysUserRole> qw2 = new QueryWrapper<>();
-                    qw2.eq("role_id", sysUserRoleList.get(i).getRoleId());
+                if (sysUserRoleList.size() != 0) {
+                    for (int i = 0; i < sysUserRoleList.size(); i++) {
+                        QueryWrapper<SysUserRole> qw2 = new QueryWrapper<>();
+                        qw2.eq("role_id", sysUserRoleList.get(i).getRoleId());
 
 //                    检查相应角色的用户绑定情况
 //                    若为0，则将该角色的用户绑定flag修改为0
-                    if(sysUserRoleMapper.selectList(qw2).size()==0){
-                        SysRole sysRole=sysRoleMapper.selectById(sysUserRoleList.get(i).getRoleId());
-                        sysRole.setUserExistFlag(0);
-                        sysRoleMapper.updateById(sysRole);
+                        if (sysUserRoleMapper.selectList(qw2).size() == 0) {
+                            SysRole sysRole = sysRoleMapper.selectById(sysUserRoleList.get(i).getRoleId());
+                            sysRole.setUserExistFlag(0);
+                            sysRoleMapper.updateById(sysRole);
+                        }
                     }
                 }
             }
@@ -234,10 +238,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<SysUserExport> sysUserExportExcel(String searchWord) {
         QueryWrapper<SysUserExport> qw = new QueryWrapper<>();
-        qw.like("name", searchWord).or().like("nick_name", searchWord).or()
-                .like("sex", searchWord).or().like("mobile", searchWord).or()
-                .like("identity", searchWord).or().like("home_address", searchWord).orderByAsc("create_time", "id");
-        return sysUserExportMapper.selectList(qw);
+        qw.isNotNull("home_address").and(q ->
+                q.like("name", searchWord).or().like("nick_name", searchWord).or()
+                        .like("sex", searchWord).or().like("mobile", searchWord).or()
+                        .like("identity", searchWord).or().like("home_address", searchWord)).orderByAsc("create_time", "id");
+        List<SysUserExport> sysUserExportList=sysUserExportMapper.selectList(qw);
+        for (SysUserExport sysUserExport : sysUserExportList) {
+            sysUserExport.setAge(DateUtils.getAge(sysUserExport.getBirthday()));
+            sysUserExport.setBirthdayStr(DateUtils.formatDate(sysUserExport.getBirthday()));
+        }
+        return sysUserExportList;
     }
 
     @Override
@@ -329,6 +339,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = sysUserMapper.selectOne(sysUserQueryWrapper);
 
         if (sysUser != null) {
+            sysUser.setAge(DateUtils.getAge(sysUser.getBirthday()));
+
             List<UserRoleView> userRoles = sysUserRoleService.getUserRoles(sysUser.getId());
             ArrayList<String> roleNameList = new ArrayList<>();
             for (UserRoleView userRole : userRoles) {
