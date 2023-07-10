@@ -35,6 +35,6 @@ public class SysLogController {
     @DeleteMapping("/sevenDayDelete")
     @PreAuthorize("hasAuthority('sys:log:delete')")
     public HttpResult sevenDayDelete(){
-        return HttpResult.success("删除成功",sysLogService.sevenDayDelete());
+        return sysLogService.sevenDayDelete();
     }
 }

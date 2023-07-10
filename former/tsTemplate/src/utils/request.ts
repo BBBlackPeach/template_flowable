@@ -2,12 +2,14 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "@/utils/url";
 import { ElMessage } from 'element-plus';
 import useUserStore from '@/store/user';
+import { removeRoutes } from '@/router';
+import useRouterStore from '@/store/router';
+import useMenuStore from '@/store/menu';
 import { storeToRefs } from 'pinia';
 import router from '@/router';
 // 以下router的引用方法是错的，以下引用方法只能在set up中使用
 // import { useRouter } from 'vue-router';
 // const router = useRouter()
-
 
 //axios配置
 const config = {
@@ -48,15 +50,14 @@ class Request {
             // const userStore = useUserStore();
             // const { token } = storeToRefs(userStore);  //可以在cookies、sessionStorage里面获取
 
-            const userInfoStorage = JSON.parse(sessionStorage.getItem('userInfo'));  //可以在cookies、sessionStorage里面获取
-            if (userInfoStorage) {
-                const token = userInfoStorage.token;
-                if (token && token != "") {
-                    //设置token到头部
-                    config.headers!['token'] = token
-                }
+            const userStore = useUserStore();
+            const { token } = storeToRefs(userStore);
+            if (token.value != null && token.value != '') {
+                config.headers!['token'] = token.value;
             }
+
             return config;
+
         }, (error: any) => {
             error.data = {}
             error.data.msg = '服务器异常，请联系管理员!'
@@ -90,13 +91,18 @@ class Request {
                     // 跳转登录页面                
                     case 403:
                         ElMessage({
-                            message: '登录过期，请重新登录',
+                            message: '无对应权限',
                             duration: 1000,
                             type: 'warning',
                         });
-                        // 清除token
-                        // localStorage.removeItem('token');
-                        // store.commit('loginSuccess', null);
+                        //清除数据
+                        removeRoutes();
+                        const routerStore = useRouterStore();
+                        const menuStore = useMenuStore();
+                        const userInfoStore = useUserStore();
+                        routerStore.setRouterNull();
+                        menuStore.setMenuNull();
+                        userInfoStore.setUserInfoNull();
                         // 跳转登录页面，并将要浏览的页面Path传过去，登录成功后跳转需要访问的页面 
                         setTimeout(() => {
                             router.replace({

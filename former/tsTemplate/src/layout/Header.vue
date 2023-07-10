@@ -11,13 +11,13 @@
       </div>
       <div class="header-layout-breadcrumb">
         <el-breadcrumb :separator-icon="ArrowRight">
-          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: 1.8vh;font-weight: bolder;">{{ item
+          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: 1.05rem;font-weight: bolder;">{{ item
           }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
     <div>
-      <strong>SJ小区物业管理系统</strong>
+      <strong>后台管理系统开发模板</strong>
     </div>
     <div class="avatar-group">
       <span v-for="role, index in userInfo.roleNames" class="tips-text">
@@ -178,8 +178,15 @@
         </el-row>
         <el-row justify="center">
           <el-col :span="16">
+            <el-form-item label="身份证号" prop="identity">
+              <el-input type="number" v-model="UpdateUserData.identity" size="large" @change="inputIdentity" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="16">
             <el-form-item label="性别" prop="sex">
-              <el-radio-group v-model="UpdateUserData.sex">
+              <el-radio-group disabled v-model="UpdateUserData.sex">
                 <el-radio label="男" />
                 <el-radio label="女" />
               </el-radio-group>
@@ -188,8 +195,8 @@
         </el-row>
         <el-row justify="center">
           <el-col :span="16">
-            <el-form-item label="年龄" prop="age">
-              <el-input type="number" v-model="UpdateUserData.age" size="large" />
+            <el-form-item label="出生年月" prop="birthday">
+              <el-input disabled v-model="UpdateUserData.birthday" size="large" placeholder="根据身份证号自动填写" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -197,13 +204,6 @@
           <el-col :span="16">
             <el-form-item label="手机号码" prop="mobile">
               <el-input type="number" v-model="UpdateUserData.mobile" size="large" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row justify="center">
-          <el-col :span="16">
-            <el-form-item label="身份证号" prop="identity">
-              <el-input type="number" v-model="UpdateUserData.identity" size="large" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -289,6 +289,8 @@
 <script setup lang="ts">
 import { deletePhotoApi } from '@/api/photo';
 import { baseURL } from '@/utils/url';
+import { getUserSex, getUserBirthday } from "@/utils/identity";
+import { dateConversion } from "@/utils/timeFormat";
 import { ArrowRight, Edit } from "@element-plus/icons-vue";
 import { ElMessageBox, ElMessage, UploadProps, UploadInstance, FormInstance, FormRules } from 'element-plus';
 import { getUserByNickApi, checkUserNameApi, updateOwnInfoApi, checkOldPasswordApi, checkUserInfoApi, updatePasswordApi } from '@/api/user'
@@ -327,6 +329,7 @@ const homeAddressFlag = ref(false)
 const userInfoData = reactive({
   sex: '',
   age: '',
+  birthday: '',
   mobile: '',
   identity: '',
   homeAddress: '',
@@ -352,7 +355,7 @@ const UpdateUserData = reactive({
   name: '',
   nickName: '',
   sex: '',
-  age: '',
+  birthday: '',
   mobile: '',
   identity: '',
   homeAddress: '',
@@ -382,16 +385,15 @@ const firstRules = reactive<FormRules>({
   sex: [
     { required: true, message: '请选择性别', trigger: ['change'] }
   ],
-  age: [
-    { required: true, message: '请输入年龄', trigger: ['blur'] }
+  birthday: [
+    { required: true, message: '请输入出生日期', trigger: ['blur'] }
   ],
   mobile: [
     { required: true, message: '请输入手机号码', trigger: ['blur'] },
     { min: 11, max: 11, message: '手机号码必须在为11位', trigger: ['blur'] }
   ],
   identity: [
-    { required: true, message: '请输入身份证号', trigger: ['blur'] },
-    { min: 18, max: 18, message: '身份证号必须在为18位', trigger: ['blur'] }
+    { required: true, message: '请输入身份证号', trigger: ['blur'] }
   ],
   homeAddress: [
     { required: true, message: '请输入家庭住址', trigger: ['change'] }
@@ -428,6 +430,7 @@ const getUserInfo = () => {
       // 记录到当前对象
       userInfoData.sex = res.data.sex;
       userInfoData.age = res.data.age;
+      userInfoData.birthday = res.data.birthday;
       userInfoData.mobile = res.data.mobile;
       userInfoData.identity = res.data.identity;
       userInfoData.homeAddress = res.data.homeAddress;
@@ -529,6 +532,12 @@ const closeAvatarDialog = () => {
   uploadAvatarRef.value.clearFiles();
 }
 
+// 根据身份证号码获取性别、出生日期
+const inputIdentity = () => {
+  UpdateUserData.sex = getUserSex(UpdateUserData.identity);
+  UpdateUserData.birthday = getUserBirthday(UpdateUserData.identity);
+}
+
 // 打开更新资料窗口
 const openInfoDialog = async (row: any) => {
   infoDialogFlag.value = true;
@@ -539,7 +548,7 @@ const openInfoDialog = async (row: any) => {
     tempUserName.value = userInfo.value.name;
     UpdateUserData.nickName = userInfo.value.nickName;
     UpdateUserData.sex = userInfoData.sex;
-    UpdateUserData.age = userInfoData.age;
+    UpdateUserData.birthday = dateConversion(userInfoData.birthday);
     UpdateUserData.mobile = userInfoData.mobile;
     UpdateUserData.identity = userInfoData.identity;
     UpdateUserData.homeAddress = userInfoData.homeAddress;
@@ -572,30 +581,38 @@ const sendUpdateUser = async (formEl1: FormInstance | undefined) => {
   if (!formEl1) return
   await formEl1.validate((valid, fields) => {
     if (valid) {
-      if (userNameSameFlag.value == false || tempUserName.value == UpdateUserData.name) {
-        loadingStore.setLoadingT();
-        console.log(UpdateUserData);
-        updateOwnInfoApi(UpdateUserData).then(res => {
-          loadingStore.setLoadingF();
-          if (res.data == 1) {
-            ElMessage({
-              message: '修改个人信息成功！',
-              type: 'success',
-            })
-            getUserInfo();
-            closeInfoDialog();
-          }
-          else {
-            ElMessage({
-              message: '修改个人信息失败！',
-              type: 'error',
-              duration: 4000
-            })
-          }
-        })
+      if (UpdateUserData.identity.length == 15 || UpdateUserData.identity.length == 18) {
+        if (userNameSameFlag.value == false || tempUserName.value == UpdateUserData.name) {
+          loadingStore.setLoadingT();
+          console.log(UpdateUserData);
+          updateOwnInfoApi(UpdateUserData).then(res => {
+            loadingStore.setLoadingF();
+            if (res.data == 1) {
+              ElMessage({
+                message: '修改个人信息成功！',
+                type: 'success',
+              })
+              getUserInfo();
+              closeInfoDialog();
+            }
+            else {
+              ElMessage({
+                message: '修改个人信息失败！',
+                type: 'error',
+                duration: 4000
+              })
+            }
+          })
+        } else {
+          ElMessage({
+            message: '该用户名已重复，请修改!',
+            type: 'error',
+            duration: 4000
+          })
+        }
       } else {
         ElMessage({
-          message: '该用户名已重复，请修改!',
+          message: '身份证号填写有误，请检查！',
           type: 'error',
           duration: 4000
         })

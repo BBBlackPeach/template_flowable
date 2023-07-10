@@ -2,8 +2,8 @@
     <div class="login-container flx-center" v-loading="loadingTF">
         <div class="login-box">
             <div class="login-left">
-                <div class="title">SJ小区物业管理系统</div>
-                <div class="sub">桂林骏泰信息科技有限公司</div>
+                <div class="title">后台管理系统开发模板</div>
+                <div class="sub">北京某某信息科技有限公司</div>
                 <img src="../../assets/login.png" alt="" />
             </div>
 
@@ -25,8 +25,8 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="verifyStatus">
-                        <SlidingVerify ref="slidingVerify" :status="loginForm.verifyStatus"
-                            :successFun="onVerifySuccess" :errorFun="onVerifyError"></SlidingVerify>
+                        <SlidingVerify ref="slidingVerify" :status="loginForm.verifyStatus" :successFun="onVerifySuccess"
+                            :errorFun="onVerifyError"></SlidingVerify>
                     </el-form-item>
                     <el-row class="flx-row">
                         <el-col :span="20">
@@ -61,7 +61,7 @@
                 <el-row v-show="activeStep == 1">
                     <el-col :span="18">
                         <el-form-item label="用户名" prop="userName" :rules="[
-                        { required: true, message: '请输入用户名', trigger: ['change'] }]">
+                            { required: true, message: '请输入用户名', trigger: ['change'] }]">
                             <el-input v-model="ForgetFormData.userName" size="large" />
                         </el-form-item>
                     </el-col>
@@ -69,7 +69,7 @@
                 <el-row v-show="activeStep == 2">
                     <el-col :span="18">
                         <el-form-item label="姓名" prop="nickName" :rules="[
-                        { required: true, message: '请输入姓名', trigger: ['change'] }]">
+                            { required: true, message: '请输入姓名', trigger: ['change'] }]">
                             <el-input v-model="ForgetFormData.nickName" size="large" />
                         </el-form-item>
                     </el-col>
@@ -77,7 +77,7 @@
                 <el-row v-show="activeStep == 2">
                     <el-col :span="18">
                         <el-form-item label="身份证号" prop="identity" :rules="[
-                        { required: true, message: '请输入身份证号', trigger: ['change'] }]">
+                            { required: true, message: '请输入身份证号', trigger: ['change'] }]">
                             <el-input type="number" v-model="ForgetFormData.identity" size="large" />
                         </el-form-item>
                     </el-col>
@@ -85,7 +85,7 @@
                 <el-row v-show="activeStep == 3">
                     <el-col :span="18">
                         <el-form-item label="新密码" prop="firstPassword" :rules="[
-                        { required: true, message: '请输入新密码', trigger: ['change'] }]">
+                            { required: true, message: '请输入新密码', trigger: ['change'] }]">
                             <el-input v-model="ForgetFormData.firstPassword" size="large" />
                         </el-form-item>
                     </el-col>
@@ -93,7 +93,7 @@
                 <el-row v-show="activeStep == 3">
                     <el-col :span="18">
                         <el-form-item label="再次输入密码" prop="secondPassword" :rules="[
-                        { required: true, message: '请再次输入密码', trigger: ['change'] }]">
+                            { required: true, message: '请再次输入密码', trigger: ['change'] }]">
                             <el-input v-model="ForgetFormData.secondPassword" size="large" />
                         </el-form-item>
                     </el-col>

@@ -1,14 +1,14 @@
 <template>
   <div class="footer-layout">
-    <!-- <div>
-      <span>版权所有：桂林医学院附属医院</span>
+    <div>
+      <span>版权所有：后台管理系统开发模板</span>
       <el-divider direction="vertical" />
-      <span>桂ICP备：03010128-1号</span>
+      <span>京ICP备：XXXXXXX-X号</span>
       <el-divider direction="vertical" />
       <span>
-        <a href="#">桂公网安备45030502000142号</a>
+        <a href="#">京公网安备XXXXXXXXXXXXXX号</a>
       </span>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -18,8 +18,9 @@
 <style lang="scss" scoped>
 .footer-layout {
   color: #888;
-  height: 30px;
-  margin-top: 10px;
+  height: 3.75vh;
+  margin-top: 0.625rem;
+  font-size: 1rem;
 
   a {
     color: #888;
@@ -30,11 +31,11 @@
     justify-content: center;
 
     .el-divider {
-      height: 20px;
+      height: 2.5vh;
     }
 
     span {
-      margin: 0 3px;
+      margin: 0 0.25rem;
     }
   }
 }

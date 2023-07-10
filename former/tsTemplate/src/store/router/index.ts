@@ -1,4 +1,15 @@
 import { defineStore } from 'pinia'
+import type { StorageLike } from 'pinia-plugin-persistedstate'
+import { secureSessionStorage } from '@/utils/storageSecure'
+
+const useRouterSt: StorageLike = {
+    setItem(key: string, value: string) {
+        secureSessionStorage.setItem(key, value)
+    },
+    getItem(key: string): string | null {
+        return secureSessionStorage.getItem(key)
+    }
+}
 
 const useRouterStore = defineStore('useRouterStore', () => {
     // 用户的动态菜单(路由信息)
@@ -31,7 +42,7 @@ const useRouterStore = defineStore('useRouterStore', () => {
 }, {
     persist: {
         key: 'routerInfo',
-        storage: sessionStorage
+        storage: useRouterSt
     }
 }
 )

@@ -66,17 +66,17 @@ const clickMenu = (name: string) => {
 
 .el-menu-vertical {
   &:not(.el-menu--collapse) {
-    width: 200px;
+    width: 12.5rem;
   }
 
   .el-menu--collapse {
-    width: 64px;
+    width: 4rem;
 
     li {
 
       .el-tooltip,
       .el-submenu__title {
-        padding: 0 15px !important;
+        padding: 0 1rem !important;
       }
     }
   }

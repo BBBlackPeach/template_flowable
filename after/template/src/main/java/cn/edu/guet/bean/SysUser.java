@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author Liwei
- * @Date 2021-08-13 17:39
+ * @author 陶祎祎
  */
 @Data
 @TableName("sys_user")
@@ -28,7 +27,10 @@ public class SysUser extends BaseModel {
 
     private String sex;
 
+    @TableField(exist = false)
     private Integer age;
+
+    private Date birthday;
 
     private String mobile;
 

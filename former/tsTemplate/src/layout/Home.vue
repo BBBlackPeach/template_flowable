@@ -13,9 +13,10 @@
             <el-main>
                 <router-view v-slot="{ Component }">
                     <transition :duration="{ enter: 500, leave: 80 }" mode="out-in" name="el-fade-in-linear">
-                        <keep-alive>
-                            <component :is="Component" />
-                        </keep-alive>
+                        <!-- 保持存活，缺点为有缓存，因此有时不为最新数据 -->
+                        <!-- <keep-alive> -->
+                        <component :is="Component" />
+                        <!-- </keep-alive> -->
                     </transition>
                 </router-view>
                 <Footer></Footer>

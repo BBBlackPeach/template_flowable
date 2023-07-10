@@ -1,4 +1,16 @@
 import { defineStore } from 'pinia'
+import type { StorageLike } from 'pinia-plugin-persistedstate'
+import { secureSessionStorage } from '@/utils/storageSecure'
+
+//会话缓存加密
+const useUserSt: StorageLike = {
+    setItem(key: string, value: string) {
+        secureSessionStorage.setItem(key, value)
+    },
+    getItem(key: string): string | null {
+        return secureSessionStorage.getItem(key)
+    }
+}
 
 const useUserStore = defineStore('useUserStore', () => {
 
@@ -78,7 +90,7 @@ const useUserStore = defineStore('useUserStore', () => {
     {
         persist: {
             key: 'userInfo',
-            storage: sessionStorage
+            storage: useUserSt
         }
     }
 )

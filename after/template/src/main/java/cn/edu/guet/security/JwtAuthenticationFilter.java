@@ -13,16 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 /**
  * 登录认证过滤器
- *
- * @Author Liwei
- * @Date 2021-08-14 09:05
+ * @author 陶祎祎
  */
 @Component
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-
 
     @Autowired
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {

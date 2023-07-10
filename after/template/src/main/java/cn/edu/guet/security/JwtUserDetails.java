@@ -8,8 +8,7 @@ import java.util.Collection;
 
 /**
  * 安全用户模型
- * @Author Liwei
- * @Date 2021-08-13 17:52
+ * @author 陶祎祎
  */
 public class JwtUserDetails implements UserDetails {
 

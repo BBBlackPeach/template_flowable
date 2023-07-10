@@ -1,4 +1,15 @@
 import { defineStore } from 'pinia'
+import type { StorageLike } from 'pinia-plugin-persistedstate'
+import { secureSessionStorage } from '@/utils/storageSecure'
+
+const useMenuSt: StorageLike = {
+    setItem(key: string, value: string) {
+        secureSessionStorage.setItem(key, value)
+    },
+    getItem(key: string): string | null {
+        return secureSessionStorage.getItem(key)
+    }
+}
 
 const useMenuStore = defineStore('useMenuStore', () => {
     // 是否水平折叠收起菜单
@@ -73,7 +84,7 @@ const useMenuStore = defineStore('useMenuStore', () => {
 }, {
     persist: {
         key: 'menuInfo',
-        storage: sessionStorage
+        storage: useMenuSt
     }
 }
 )

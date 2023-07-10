@@ -45,9 +45,8 @@
         <!-- 分页器 -->
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
 
@@ -84,8 +83,7 @@
         </el-dialog>
 
         <!-- 更新窗口 -->
-        <el-dialog v-model="updateDialogFlag" title="更新角色信息" width="40%" draggable center
-            :before-close="closeUpdateDialog">
+        <el-dialog v-model="updateDialogFlag" title="更新角色信息" width="40%" draggable center :before-close="closeUpdateDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:118px;padding: 0;">
                 <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="80px"
                     :model="UpdateRoleData" style="max-width: 100%">
@@ -117,8 +115,7 @@
         </el-dialog>
 
         <!-- 授权窗口 -->
-        <el-dialog v-model="authorDialogFlag" title="分配权限" width="30%" draggable center
-            :before-close="closeAuthorDialog">
+        <el-dialog v-model="authorDialogFlag" title="分配权限" width="30%" draggable center :before-close="closeAuthorDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:398px;padding: 0;">
                 <el-tree ref="treeRef" node-key="id" :data="allMenuList" show-checkbox :props="defaultProps"
                     :highlight-current="true" />
@@ -532,6 +529,4 @@ const UpdateReturnTop = () => {
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/style/common.scss"
-</style>
+<style lang="scss" scoped></style>

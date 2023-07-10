@@ -33,7 +33,12 @@
                 <template #default="scope">
                     <el-image style="width: 9.7vh; height: 9.7vh"
                         :src="scope.row.avatar == '' || scope.row.avatar == null ? null : scope.row.avatar"
-                        :preview-src-list="scope.row.avatarArray" fit="cover" :preview-teleported="true" />
+                        :preview-src-list="scope.row.avatarArray" fit="cover" :preview-teleported="true">
+                        <template #placeholder>
+                            <div class="imagePlaceholderSlot">{{ scope.row.avatar == '' || scope.row.avatar == null ? "无" :
+                                "Loading..." }}</div>
+                        </template>
+                    </el-image>
                 </template>
             </el-table-column>
             <!-- <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
@@ -55,9 +60,8 @@
         <!-- 分页器 -->
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
 
@@ -76,14 +80,14 @@
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="姓名" prop="nickName">
-                                <el-input v-model="NewUserData.nickName" size="large" />
+                                <el-input v-model="NewUserData.nickName" size="large" placeholder="请输入真实姓名" />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="用户名" prop="name">
-                                <el-input v-model="NewUserData.name" size="large"
+                                <el-input v-model="NewUserData.name" size="large" placeholder="用于账号登录"
                                     :suffix-icon="userNameSameFlag ? 'CloseBold' : 'Select'" @input="checkUserName" />
                             </el-form-item>
                         </el-col>
@@ -100,8 +104,16 @@
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
+                            <el-form-item label="身份证号" prop="identity">
+                                <el-input type="number" v-model="NewUserData.identity" size="large"
+                                    @change="inputIdentity" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
                             <el-form-item label="性别" prop="sex">
-                                <el-radio-group v-model="NewUserData.sex">
+                                <el-radio-group disabled v-model="NewUserData.sex">
                                     <el-radio label="男" />
                                     <el-radio label="女" />
                                 </el-radio-group>
@@ -110,8 +122,8 @@
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
-                            <el-form-item label="年龄" prop="age">
-                                <el-input type="number" v-model="NewUserData.age" size="large" />
+                            <el-form-item label="出生年月" prop="birthday">
+                                <el-input disabled v-model="NewUserData.birthday" size="large" placeholder="根据身份证号自动填写" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -119,13 +131,6 @@
                         <el-col :span="16">
                             <el-form-item label="手机号码" prop="mobile">
                                 <el-input type="number" v-model="NewUserData.mobile" size="large" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="身份证号" prop="identity">
-                                <el-input type="number" v-model="NewUserData.identity" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -163,22 +168,21 @@
         </el-dialog>
 
         <!-- 更新窗口 -->
-        <el-dialog v-model="updateDialogFlag" title="更新用户信息" width="40%" draggable center
-            :before-close="closeUpdateDialog">
+        <el-dialog v-model="updateDialogFlag" title="更新用户信息" width="40%" draggable center :before-close="closeUpdateDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:398px;padding: 0;">
                 <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="80px"
                     :model="UpdateUserData" style="max-width: 100%">
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="姓名" prop="nickName">
-                                <el-input v-model="UpdateUserData.nickName" size="large" />
+                                <el-input v-model="UpdateUserData.nickName" size="large" placeholder="请填写真实姓名" />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="用户名" prop="name">
-                                <el-input v-model="UpdateUserData.name" size="large"
+                                <el-input v-model="UpdateUserData.name" size="large" placeholder="用于账号登录"
                                     :suffix-icon="userNameSameFlag ? 'CloseBold' : 'Select'" @input="checkUserName" />
                             </el-form-item>
                         </el-col>
@@ -195,8 +199,16 @@
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
+                            <el-form-item label="身份证号" prop="identity">
+                                <el-input type="number" v-model="UpdateUserData.identity" size="large"
+                                    @change="inputIdentity" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
                             <el-form-item label="性别" prop="sex">
-                                <el-radio-group v-model="UpdateUserData.sex">
+                                <el-radio-group disabled v-model="UpdateUserData.sex">
                                     <el-radio label="男" />
                                     <el-radio label="女" />
                                 </el-radio-group>
@@ -205,8 +217,9 @@
                     </el-row>
                     <el-row justify="center">
                         <el-col :span="16">
-                            <el-form-item label="年龄" prop="age">
-                                <el-input type="number" v-model="UpdateUserData.age" size="large" />
+                            <el-form-item label="出生年月" prop="birthday">
+                                <el-input disabled v-model="UpdateUserData.birthday" size="large"
+                                    placeholder="根据身份证号自动填写" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -214,13 +227,6 @@
                         <el-col :span="16">
                             <el-form-item label="手机号码" prop="mobile">
                                 <el-input type="number" v-model="UpdateUserData.mobile" size="large" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="身份证号" prop="identity">
-                                <el-input type="number" v-model="UpdateUserData.identity" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -268,7 +274,8 @@
 import useLoadingStore from "@/store/loading";
 import { Plus, Delete, Search, Download, Edit } from "@element-plus/icons-vue";
 import { ElTable, ElMessage, ElMessageBox, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus';
-import { conversionDateTime, dateTimeConversion } from "@/utils/timeFormat";
+import { conversionDateTime, dateConversion } from "@/utils/timeFormat";
+import { getUserSex, getUserBirthday } from "@/utils/identity";
 import {
     getUserListApi, getRoleSelectApi, getUserRolesApi, searchUserApi, addUserApi, updateUserApi,
     deleteUserApi, checkUserNameApi, sendExportParmApi
@@ -287,7 +294,7 @@ const firstTableData = ref([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
 const updateDialogFlag = ref(false)
-const detailDialogFlag = ref(false)
+// const detailDialogFlag = ref(false)
 const firstFormRef = ref<FormInstance>()
 const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
@@ -308,7 +315,7 @@ const NewUserData = reactive({
     nickName: '',
     roleId: [],
     sex: '',
-    age: '',
+    birthday: '',
     mobile: '',
     identity: '',
     homeAddress: '',
@@ -322,7 +329,7 @@ const UpdateUserData = reactive({
     nickName: '',
     roleId: [],
     sex: '',
-    age: '',
+    birthday: '',
     mobile: '',
     identity: '',
     homeAddress: '',
@@ -331,18 +338,18 @@ const UpdateUserData = reactive({
 })
 
 // 详情
-const UserDetail = reactive({
-    name: '',
-    nickName: '',
-    sex: '',
-    age: '',
-    mobile: '',
-    identity: '',
-    homeAddress: '',
-    avatar: '',
-    // createTime: '',
-    // createBy: '',
-})
+// const UserDetail = reactive({
+//     name: '',
+//     nickName: '',
+//     sex: '',
+//     birthday: '',
+//     mobile: '',
+//     identity: '',
+//     homeAddress: '',
+//     avatar: '',
+//     createTime: '',
+//     createBy: '',
+// })
 
 
 //表单校验规则
@@ -359,8 +366,8 @@ const firstRules = reactive<FormRules>({
     sex: [
         { required: true, message: '请选择性别', trigger: ['change'] }
     ],
-    age: [
-        { required: true, message: '请输入年龄', trigger: ['blur'] }
+    birthday: [
+        { required: true, message: '请输入出生日期', trigger: ['blur'] }
     ],
     mobile: [
         { required: true, message: '请输入手机号码', trigger: ['blur'] },
@@ -368,7 +375,7 @@ const firstRules = reactive<FormRules>({
     ],
     identity: [
         { required: true, message: '请输入身份证号', trigger: ['blur'] },
-        { min: 18, max: 18, message: '身份证号必须在为18位', trigger: ['blur'] }
+        { min: 15, max: 18, message: '身份证号必须为15或18位', trigger: ['blur'] }
     ],
     homeAddress: [
         { required: true, message: '请输入家庭住址', trigger: ['change'] }
@@ -449,6 +456,16 @@ const exportExcel = () => {
     })
 }
 
+// 根据身份证号码获取性别、出生日期
+const inputIdentity = () => {
+    if (addDialogFlag.value) {
+        NewUserData.sex = getUserSex(NewUserData.identity);
+        NewUserData.birthday = getUserBirthday(NewUserData.identity);
+    } else if (updateDialogFlag.value) {
+        UpdateUserData.sex = getUserSex(UpdateUserData.identity);
+        UpdateUserData.birthday = getUserBirthday(UpdateUserData.identity);
+    }
+}
 
 // 打开新增窗口
 const openAddDialog = () => {
@@ -461,30 +478,38 @@ const sendAddUser = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            if (userNameSameFlag.value == false) {
-                loadingStore.setLoadingT();
-                console.log(NewUserData);
-                addUserApi(NewUserData).then(res => {
-                    loadingStore.setLoadingF();
-                    if (res.data == 1) {
-                        ElMessage({
-                            message: '新增用户成功！',
-                            type: 'success',
-                        })
-                        initialize();
-                        closeAddDialog();
-                    }
-                    else {
-                        ElMessage({
-                            message: '新增用户失败！',
-                            type: 'error',
-                            duration: 4000
-                        })
-                    }
-                })
+            if (NewUserData.identity.length == 15 || NewUserData.identity.length == 18) {
+                if (userNameSameFlag.value == false) {
+                    loadingStore.setLoadingT();
+                    console.log(NewUserData);
+                    addUserApi(NewUserData).then(res => {
+                        loadingStore.setLoadingF();
+                        if (res.data == 1) {
+                            ElMessage({
+                                message: '新增用户成功！用户密码默认为对应身份证号',
+                                type: 'success',
+                            })
+                            initialize();
+                            closeAddDialog();
+                        }
+                        else {
+                            ElMessage({
+                                message: '新增用户失败！',
+                                type: 'error',
+                                duration: 4000
+                            })
+                        }
+                    })
+                } else {
+                    ElMessage({
+                        message: '该用户名已重复，请修改！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
             } else {
                 ElMessage({
-                    message: '该用户名已重复，请修改！',
+                    message: '身份证号填写有误，请检查！',
                     type: 'error',
                     duration: 4000
                 })
@@ -550,7 +575,7 @@ const openUpdateDialog = async (row: any) => {
             UpdateUserData.nickName = row.nickName;
             UpdateUserData.roleId = roleIds;
             UpdateUserData.sex = row.sex;
-            UpdateUserData.age = row.age;
+            UpdateUserData.birthday = dateConversion(row.birthday);
             UpdateUserData.mobile = row.mobile;
             UpdateUserData.identity = row.identity;
             UpdateUserData.homeAddress = row.homeAddress;
@@ -572,36 +597,44 @@ const sendUpdateUser = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            if (userNameSameFlag.value == false || tempUserName.value == UpdateUserData.name) {
-                loadingStore.setLoadingT();
-                console.log(UpdateUserData);
-                updateUserApi(UpdateUserData).then(res => {
-                    loadingStore.setLoadingF();
-                    if (res.data == 1) {
-                        ElMessage({
-                            message: '修改用户信息成功！',
-                            type: 'success',
-                        })
-                        initialize();
-                        closeUpdateDialog();
-                        if (preDeletePhoto.value != null) {
-                            // 删除修改的照片
-                            deletePhotoApi(preDeletePhoto.value).then(() => {
-                                preDeletePhoto.value = null;
-                            });
+            if (UpdateUserData.identity.length == 15 || UpdateUserData.identity.length == 18) {
+                if (userNameSameFlag.value == false || tempUserName.value == UpdateUserData.name) {
+                    loadingStore.setLoadingT();
+                    console.log(UpdateUserData);
+                    updateUserApi(UpdateUserData).then(res => {
+                        loadingStore.setLoadingF();
+                        if (res.data == 1) {
+                            ElMessage({
+                                message: '修改用户信息成功！',
+                                type: 'success',
+                            })
+                            initialize();
+                            closeUpdateDialog();
+                            if (preDeletePhoto.value != null) {
+                                // 删除修改的照片
+                                deletePhotoApi(preDeletePhoto.value).then(() => {
+                                    preDeletePhoto.value = null;
+                                });
+                            }
                         }
-                    }
-                    else {
-                        ElMessage({
-                            message: '修改用户信息失败！',
-                            type: 'error',
-                            duration: 4000
-                        })
-                    }
-                })
+                        else {
+                            ElMessage({
+                                message: '修改用户信息失败！',
+                                type: 'error',
+                                duration: 4000
+                            })
+                        }
+                    })
+                } else {
+                    ElMessage({
+                        message: '该用户名已重复，请修改!',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
             } else {
                 ElMessage({
-                    message: '该用户名已重复，请修改!',
+                    message: '身份证号填写有误，请检查！',
                     type: 'error',
                     duration: 4000
                 })
@@ -620,6 +653,7 @@ const sendUpdateUser = async (formEl1: FormInstance | undefined) => {
 // 关闭更新窗口
 const closeUpdateDialog = () => {
     updateAvatarModel.value = [];
+    UpdateUserData.avatarArray.length = 0;
     userNameSameFlag.value = true;
     preDeletePhoto.value = null;
     updateDialogFlag.value = false;
@@ -685,25 +719,25 @@ const updateHandleRemove: UploadProps['onRemove'] = (uploadFile: any, uploadFile
 
 
 // 打开详情窗口
-const openDetailDialog = async (row: any) => {
-    UserDetail.name = row.name;
-    UserDetail.nickName = row.nickName;
-    UserDetail.sex = row.sex;
-    UserDetail.age = row.age;
-    UserDetail.mobile = row.mobile;
-    UserDetail.identity = row.identity;
-    UserDetail.homeAddress = row.homeAddress;
-    UserDetail.avatar = row.avatar;
-    // UserDetail.createTime = dateTimeConversion(row.createTime);
-    // UserDetail.createBy = row.createBy;
-    detailDialogFlag.value = true
-}
+// const openDetailDialog = async (row: any) => {
+//     UserDetail.name = row.name;
+//     UserDetail.nickName = row.nickName;
+//     UserDetail.sex = row.sex;
+//     UserDetail.age = row.age;
+//     UserDetail.mobile = row.mobile;
+//     UserDetail.identity = row.identity;
+//     UserDetail.homeAddress = row.homeAddress;
+//     UserDetail.avatar = row.avatar;
+//     UserDetail.createTime = dateTimeConversion(row.createTime);
+//     UserDetail.createBy = row.createBy;
+//     detailDialogFlag.value = true
+// }
 
 
 // 关闭详情窗口
-const closeDetailDialog = () => {
-    detailDialogFlag.value = false;
-}
+// const closeDetailDialog = () => {
+//     detailDialogFlag.value = false;
+// }
 
 
 // 打开删除窗口
@@ -759,7 +793,5 @@ const UpdateReturnTop = () => {
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/style/common.scss";
-</style>
+<style lang="scss" scoped></style>
 

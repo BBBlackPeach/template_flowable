@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * @Author Liwei
- * @Date 2021-08-13 17:38
+ * @author 陶祎祎
  */
 @Data
 @TableName("sys_role")

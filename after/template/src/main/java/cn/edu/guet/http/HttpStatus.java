@@ -6,6 +6,7 @@ package cn.edu.guet.http;
  * RFC2518 (WebDAV) are listed.
  *
  *
+ * @author 陶祎祎
  * @since 4.0
  */
 public interface HttpStatus {
