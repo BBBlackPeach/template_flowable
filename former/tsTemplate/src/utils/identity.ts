@@ -5,7 +5,7 @@ export const getUserSex = (identity: any) => {
     let sexFlag = null;
     if (identity.length == 15) {
         // 倒数第一位是性别识别码
-        sexFlag = Number(identity.substring(14));
+        sexFlag = Number(identity.substring(14,15));
         console.log(sexFlag);
         if (sexFlag % 2 == 0) {
             return "女"
@@ -14,7 +14,7 @@ export const getUserSex = (identity: any) => {
         }
     } else if (identity.length == 18) {
         // 倒数第二位是性别识别码
-        sexFlag = Number(identity.substring(16));
+        sexFlag = Number(identity.substring(16,17));
         console.log(sexFlag);
         if (sexFlag % 2 == 0) {
             return "女"
