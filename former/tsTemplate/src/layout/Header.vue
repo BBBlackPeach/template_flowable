@@ -11,7 +11,8 @@
       </div>
       <div class="header-layout-breadcrumb">
         <el-breadcrumb :separator-icon="ArrowRight">
-          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: 1.05rem;font-weight: bolder;">{{ item
+          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: $SecondFontSize;font-weight: bolder;">{{
+            item
           }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -58,7 +59,7 @@
           style="width: 16vh; height: 16vh; border-radius: 50%" />
       </div>
     </div>
-    <div class="centerCommon">
+    <div class="centerCommon" style="line-height: 6vh;">
       <span class="userNameClass">用户名：</span>{{ userInfo.name }}
     </div>
     <el-divider border-style="double" style="height: 0.3vh;background-color: #2d51e6;">
@@ -789,6 +790,7 @@ const closePasswordDialog = () => {
 .header-layout {
   display: flex;
   justify-content: space-between;
+  font-size: $defaultFontSize;
 
   .header-layout-icon {
     display: flex;
@@ -809,7 +811,7 @@ const closePasswordDialog = () => {
     align-items: center;
 
     .avatar {
-      margin: 0 1vw;
+      margin: 0 1vh;
     }
   }
 }
@@ -847,11 +849,11 @@ const closePasswordDialog = () => {
   display: flex;
   align-items: center;
   flex-direction: row;
-  font-size: 1.7vh;
+  font-size: $SecondFontSize;
 }
 
 .drawerButtonGroup {
-  margin-top: 10vh;
+  margin-top: 8vh;
   display: flex;
   justify-content: center;
 }

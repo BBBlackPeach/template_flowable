@@ -18,9 +18,9 @@
 <style lang="scss" scoped>
 .footer-layout {
   color: #888;
-  height: 3.75vh;
-  margin-top: 0.625rem;
-  font-size: 1rem;
+  height: 3vh;
+  margin-top: 0.3rem;
+  font-size: $defaultFontSize;
 
   a {
     color: #888;
@@ -34,9 +34,9 @@
       height: 2.5vh;
     }
 
-    span {
-      margin: 0 0.25rem;
-    }
+    // span {
+    // margin: 0 1vh;
+    // }
   }
 }
 </style>

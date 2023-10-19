@@ -3,6 +3,7 @@ package cn.edu.guet.util;
 import cn.edu.guet.mapper.SysUserMapper;
 import cn.edu.guet.security.JwtAuthenticationToken;
 import cn.edu.guet.security.JwtUserDetails;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,10 +20,10 @@ import javax.servlet.http.HttpServletRequest;
  * @author 陶祎祎
  */
 @Component
+@AllArgsConstructor
 public class SecurityUtils {
     private static SecurityUtils securityUtils;
 
-    @Resource
     private SysUserMapper sysUserMapper;
 
     @PostConstruct

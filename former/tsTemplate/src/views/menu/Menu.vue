@@ -9,7 +9,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" row-key="id" :data="firstTableData" style="width: 98%;height: 72vh;" :border="true"
+        <el-table class="tableGroup" row-key="id" :data="firstTableData" style="width: 98%;height: 69vh;" :border="true"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" stripe highlight-current-row>
             <el-table-column property="name" align="center" label="菜单名称" />
             <el-table-column align="center" label="类型" width="80">
@@ -117,7 +117,8 @@
                     <el-row v-show="NewMenuData.type != '2'" justify="center">
                         <el-col :span="16">
                             <el-form-item label="图标" prop="icon">
-                                <ELIconPicker :icon-value="NewMenuData.icon" @updateIcon="updateIcon"></ELIconPicker>
+                                <ELIconPicker :icon-value="NewMenuData.icon" @updateIcon="addDialogUpdateIcon">
+                                </ELIconPicker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -215,7 +216,8 @@
                     <el-row v-show="UpdateMenuData.type != '2'" justify="center">
                         <el-col :span="16">
                             <el-form-item label="图标" prop="icon">
-                                <el-input v-model="UpdateMenuData.icon" size="large" />
+                                <ELIconPicker :icon-value="UpdateMenuData.icon" @updateIcon="updateDialogUpdateIcon">
+                                </ELIconPicker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -374,7 +376,8 @@ const openAddDialog = () => {
     addDialogFlag.value = true
 }
 
-const updateIcon = (v: any) => {
+// 新增窗口选择图标
+const addDialogUpdateIcon = (v: any) => {
     console.log(v);
     NewMenuData.icon = v;
 }
@@ -586,10 +589,15 @@ const openUpdateDialog = async (row: any) => {
     })
 }
 
+// 更新窗口选择图标
+const updateDialogUpdateIcon = (v: any) => {
+    console.log(v);
+    UpdateMenuData.icon = v;
+}
 
 // 更新窗口：提交状态验证
 const getUpdateSubmit = () => {
-    if (NewMenuData.type == '0') {
+    if (UpdateMenuData.type == '0') {
         if (menuNameSameFlag.value && UpdateMenuData.name != tempMenuName.value) {
             addSubmitTips.value = "名称已重复，无法提交";
             tooltipDisabled.value = false;
@@ -602,7 +610,7 @@ const getUpdateSubmit = () => {
             tooltipDisabled.value = true;
             return false;
         }
-    } else if (NewMenuData.type == '1') {
+    } else if (UpdateMenuData.type == '1') {
         if (menuNameSameFlag.value && UpdateMenuData.name != tempMenuName.value) {
             addSubmitTips.value = "名称已重复，无法提交";
             tooltipDisabled.value = false;
@@ -619,7 +627,7 @@ const getUpdateSubmit = () => {
             tooltipDisabled.value = true;
             return false;
         }
-    } else if (NewMenuData.type == '2') {
+    } else if (UpdateMenuData.type == '2') {
         if (menuNameSameFlag.value && UpdateMenuData.name != tempMenuName.value) {
             addSubmitTips.value = "名称已重复，无法提交";
             tooltipDisabled.value = false;
@@ -734,14 +742,6 @@ const UpdateReturnTop = () => {
 </script>
 
 <style lang="scss" scoped>
-.layout {
-    position: relative;
-    min-height: calc(100vh - 260px);
-    background-color: #ffffff;
-    margin: 15px 15px 0 15px;
-    height: 82vh
-}
-
 .headerGroup {
     justify-content: left;
     display: flex;

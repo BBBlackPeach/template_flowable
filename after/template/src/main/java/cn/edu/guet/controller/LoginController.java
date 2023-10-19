@@ -9,7 +9,7 @@ import cn.edu.guet.security.JwtAuthenticationToken;
 import cn.edu.guet.service.SysUserService;
 import cn.edu.guet.util.PasswordUtils;
 import cn.edu.guet.util.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,15 +22,13 @@ import javax.servlet.http.HttpServletRequest;
  * @author 陶祎祎
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/login")
 public class LoginController {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private SysUserService sysUserService;
-
 
     @PostMapping("/login")
 //    public HttpResult login(String username, String password, HttpServletRequest request) {

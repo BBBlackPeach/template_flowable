@@ -7,6 +7,7 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.service.SysMenuService;
 import cn.edu.guet.util.MakeMenuTree;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,10 @@ import java.util.List;
  * @author 陶祎祎
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/menu")
 public class SysMenuController {
 
-    @Autowired
     private SysMenuService sysMenuService;
 
     // @PreAuthorize("hasAuthority('sys:menu:view')")

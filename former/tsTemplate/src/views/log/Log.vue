@@ -10,7 +10,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" :data="firstTableData" style="width: 98%;height: 67vh;" :border="true" stripe
+        <el-table class="tableGroup" :data="firstTableData" style="width: 98%;height: 65vh;" :border="true" stripe
             highlight-current-row>
             <el-table-column property="userName" align="center" label="操作人" width="100" />
             <el-table-column property="method" align="center" label="请求方法" width="450" />
@@ -147,14 +147,6 @@ const sendSevenDeleteLog = () => {
 </script>
 
 <style lang="scss" scoped>
-.layout {
-    position: relative;
-    min-height: calc(100vh - 260px);
-    background-color: #ffffff;
-    margin: 15px 15px 0 15px;
-    height: 82vh
-}
-
 .headerGroup {
     justify-content: left;
     display: flex;

@@ -19,6 +19,7 @@ import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,24 +33,19 @@ import static cn.edu.guet.util.ImageUtils.deleteImages;
  * @author 陶祎祎
  */
 @Service
+@AllArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
-    @Autowired
     private SysUserMapper sysUserMapper;
 
-    @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
-    @Autowired
     private SysRoleMapper sysRoleMapper;
 
-    @Autowired
     private SysUserExportMapper sysUserExportMapper;
 
-    @Autowired
     private SysUserRoleService sysUserRoleService;
 
-    @Autowired
     private SysMenuService sysMenuService;
 
     @Override

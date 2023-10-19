@@ -69,6 +69,7 @@ onMounted(() => {
   padding: 0;
   border-top: 1px solid #f4f4f4;
   height: 40px;
+  font-size: $defaultFontSize;
 
   .el-tabs__header .el-tabs__item {
     border: none;

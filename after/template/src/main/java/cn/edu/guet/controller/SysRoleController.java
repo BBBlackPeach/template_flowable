@@ -5,6 +5,7 @@ import cn.edu.guet.bean.util.RoleAuthorParm;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.service.SysRoleMenuService;
 import cn.edu.guet.service.SysRoleService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
  * @author 陶祎祎
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/role")
 public class SysRoleController {
 
-    @Autowired
     private SysRoleService sysRoleService;
 
-    @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
     //    获取角色数据

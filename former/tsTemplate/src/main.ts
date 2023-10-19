@@ -12,6 +12,12 @@ import { createPinia } from 'pinia'
 // 持久化存储pinia
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { permission } from '@/directives/permission'
+// Avue
+import Avue from '@smallwei/avue';
+import '@smallwei/avue/lib/index.css';
+// 为了使用Avue的字典和上传组件
+import axios from 'axios'
+
 
 //防止localStorage被篡改
 window.addEventListener('storage', (e: any) => {
@@ -50,6 +56,9 @@ app.use(createPinia().use(piniaPluginPersistedstate))
 
 // 自定义指令实现按钮权限封装
 app.directive("perms", permission)
+
+// Avue
+app.use(Avue, { axios })
 
 app.use(router).mount('#app')
 

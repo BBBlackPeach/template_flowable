@@ -15,6 +15,7 @@ import cn.edu.guet.service.SysRoleService;
 import cn.edu.guet.service.SysUserRoleService;
 import cn.edu.guet.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,16 +34,14 @@ import static cn.edu.guet.util.ExcelUtils.downloadExcel;
  * @author 陶祎祎
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/user")
 public class SysUserController {
 
-    @Autowired
     private SysUserService sysUserService;
 
-    @Resource
     private SysUserRoleService sysUserRoleService;
 
-    @Resource
     private SysRoleService sysRoleService;
 
 

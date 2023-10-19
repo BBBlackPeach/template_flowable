@@ -20,8 +20,8 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 66vh;" :border="true"
-            highlight-current-row>
+        <el-table class="tableGroup" stripe :data="firstTableData"
+            style="width: 98%;height: 64vh;font-size: $defaultFontSize;" :border="true" highlight-current-row>
             <el-table-column property="nickName" align="center" label="姓名" width="100" />
             <el-table-column property="name" align="center" label="用户名" width="100" />
             <el-table-column property="sex" align="center" label="性别" width="80" />
@@ -31,7 +31,7 @@
             <el-table-column property="homeAddress" align="center" label="家庭住址" />
             <el-table-column align="center" label="头像">
                 <template #default="scope">
-                    <el-image style="width: 9.7vh; height: 9.7vh"
+                    <el-image style="width: 9.2vh; height: 9.2vh"
                         :src="scope.row.avatar == '' || scope.row.avatar == null ? null : scope.row.avatar"
                         :preview-src-list="scope.row.avatarArray" fit="cover" :preview-teleported="true">
                         <template #placeholder>

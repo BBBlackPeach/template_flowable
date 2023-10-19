@@ -16,12 +16,12 @@
                 </div>
                 <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
                     <el-form-item prop="username">
-                        <el-input :prefix-icon="User" v-model="loginForm.username" placeholder="用户名">
+                        <el-input :prefix-icon="User" size="default" v-model="loginForm.username" placeholder="用户名">
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input :prefix-icon="Lock" type="password" show-password v-model="loginForm.password"
-                            placeholder="密码">
+                        <el-input :prefix-icon="Lock" size="default" type="password" show-password
+                            v-model="loginForm.password" placeholder="密码">
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="verifyStatus">
@@ -30,7 +30,7 @@
                     </el-form-item>
                     <el-row class="flx-row">
                         <el-col :span="20">
-                            <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="large" />
+                            <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="default" />
                         </el-col>
                         <el-col class="flx-col" :span="4" @click="openForgetDialog">
                             忘记密码?
@@ -412,27 +412,33 @@ const closeForgetDialog = () => {
         justify-content: space-around;
 
         .login-left {
-            width: 800px;
+            width: 50vw;
+            // width: 800px;
             color: #6E736FFF;
 
             .title {
-                font-size: 48px;
+                font-size: 5vh;
                 font-weight: 400;
                 letter-spacing: 0px;
                 color: rgba(47, 57, 78, 1);
                 text-align: left;
             }
 
+            .sub {
+                font-size: 2vh;
+            }
+
             img {
-                width: 735px;
-                height: 465px;
+                width: 46vw;
+                height: 50vh;
+                // height: 465px;
             }
         }
 
         .login-form {
-            width: 400px;
-            height: 500px;
-            padding: 10px 40px 35px 40px;
+            width: 24.5vw;
+            height: 60vh;
+            padding: 1vh 3vw 4vh 3vw;
             border-radius: 10px;
             -webkit-box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
             box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
@@ -445,24 +451,26 @@ const closeForgetDialog = () => {
 
                 .login-icon {
                     margin-top: 10px;
-                    width: 200px;
+                    // width: 200px;
                     // height: 52px;
                 }
 
                 .logo-text {
                     font-weight: bold;
-                    font-size: 32px;
+                    font-size: 3.6vh;
+                    // font-size: 32px;
                     padding-left: 5px;
-                    margin-top: 80px;
+                    margin-top: 9vh;
+                    // margin-top: 80px;
                     // margin-top: 10px;
-                    margin-bottom: 20px;
+                    margin-bottom: 2.2vh;
                     white-space: nowrap;
                     color: #2d51e6;
                 }
             }
 
             .flx-row {
-                font-size: 14px;
+                font-size: 1.7vh;
                 // color: #3c5de3;
                 color: #2d51e6;
 
@@ -474,15 +482,16 @@ const closeForgetDialog = () => {
             }
 
             .login-btn {
-                margin-top: 15px;
-                padding-bottom: 20px;
+                margin-top: 1.7vh;
+                padding-bottom: 2vw;
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
                 white-space: nowrap;
 
-                .el-button {
-                    width: 185px;
+                :deep(.el-button) {
+                    width: 11vw;
+                    // width: 185px;
                 }
             }
         }

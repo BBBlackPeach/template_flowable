@@ -2,6 +2,7 @@ package cn.edu.guet.controller;
 
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.service.SysLogService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,10 @@ import javax.annotation.Resource;
  * @author 陶祎祎
  */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/log")
 public class SysLogController {
 
-    @Resource
     private SysLogService sysLogService;
 
     @GetMapping("/getLogList")
