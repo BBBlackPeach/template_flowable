@@ -1,7 +1,7 @@
 <template>
-  <div class="header-layout">
+  <div class="header-layout" :style="`color: ${styleStore.headerTextColor}`">
     <div class="justifyCenterGroup" @click="clickCollapse">
-      <div class="header-layout-icon">
+      <div class="header-layout-icon-group">
         <el-icon v-if="collapseTF" size="26">
           <Expand />
         </el-icon>
@@ -11,17 +11,32 @@
       </div>
       <div class="header-layout-breadcrumb">
         <el-breadcrumb :separator-icon="ArrowRight">
-          <el-breadcrumb-item v-for="item in breadcrumbPath" style="font-size: $SecondFontSize;font-weight: bolder;">{{
-            item
-          }}</el-breadcrumb-item>
+          <el-breadcrumb-item class="header-layout-breadcrumb-item" v-for="item in breadcrumbPath">
+            <span :style="`color: ${styleStore.headerTextColor}`">
+              {{
+                item
+              }}
+            </span>
+          </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
     <div>
-      <strong>后台管理系统开发模板</strong>
+      <div class="header-layout-title">后台管理系统开发模板</div>
     </div>
     <div class="avatar-group">
-      <span v-for="role, index in userInfo.roleNames" class="tips-text">
+      <div class="header-layout-icon-group" style="margin-right: 0.8rem;">
+        <el-icon class="header-layout-icon" size="26" @click="openStyleDialog">
+          <Brush />
+        </el-icon>
+        <el-icon class="header-layout-icon" v-if="fullScreenTF" size="26" @click="changeFullScreen">
+          <TopRight />
+        </el-icon>
+        <el-icon class="header-layout-icon" v-else size="26" @click="changeFullScreen">
+          <FullScreen />
+        </el-icon>
+      </div>
+      <span v-for="role, index in userInfo.roleNames">
         <span v-if="index != 1">{{
           role
         }}</span>
@@ -29,7 +44,7 @@
       </span>
       <el-avatar class="avatar" :src="userInfo.avatar" size="large"></el-avatar>
       <el-dropdown>
-        <span class="el-dropdown-link">
+        <span :style="`color: ${styleStore.headerTextColor}`">
           {{ userInfo.nickName }}
           <el-icon>
             <ArrowDownBold />
@@ -128,6 +143,70 @@
       </el-button>
     </div>
   </el-drawer>
+
+  <!-- 自定义主题窗口 -->
+  <el-dialog v-model="styleDialogFlag" title="自定义主题颜色" width="40%" :modal="false" draggable center
+    :before-close="closeStyleDialog">
+    <el-form label-position="right" label-width="150px" style="max-width: 100%">
+      <el-row justify="center">
+        <el-col :span="10">
+          <el-form-item label="菜单栏背景颜色">
+            <el-color-picker v-model="NewStyleData.asideBackgroundColor" size="large"
+              :change="styleStore.setAsideBackgroundColor(NewStyleData.asideBackgroundColor)" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="头部背景颜色">
+            <el-color-picker v-model="NewStyleData.headerBackgroundColor" size="large"
+              :change="styleStore.setHeaderBackgroundColor(NewStyleData.headerBackgroundColor)" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row justify="center">
+        <el-col :span="10">
+          <el-form-item label="菜单栏字体颜色">
+            <el-color-picker v-model="NewStyleData.asideTextColor" size="large"
+              :change="styleStore.setAsideTextColor(NewStyleData.asideTextColor)" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="头部字体颜色">
+            <el-color-picker v-model="NewStyleData.headerTextColor" size="large"
+              :change="styleStore.setHeaderTextColor(NewStyleData.headerTextColor)" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row justify="center">
+        <el-col :span="10">
+          <el-form-item label="菜单栏选中字体颜色">
+            <el-color-picker v-model="NewStyleData.asideActiveTextColor" size="large"
+              :change="styleStore.setAsideActiveTextColor(NewStyleData.asideActiveTextColor)" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="标签页被选中颜色">
+            <el-color-picker v-model="NewStyleData.tabActiveTextColor" size="large"
+              :change="styleStore.setTabActiveTextColor(NewStyleData.tabActiveTextColor)" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row justify="center">
+        <el-col :span="20">
+          <el-form-item label="内容页背景颜色">
+            <el-color-picker v-model="NewStyleData.mainBackgroundColor" size="large"
+              :change="styleStore.setMainBackgroundColor(NewStyleData.mainBackgroundColor)" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="styleStore.setDefaultStyle">
+          默认主题
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 
   <!-- 更换头像窗口 -->
   <el-dialog v-model="avatarDialogFlag" title="头像预览" width="32%" draggable center :before-close="closeAvatarDialog">
@@ -299,13 +378,16 @@ import useRouterStore from '@/store/router';
 import useMenuStore from '@/store/menu';
 import useUserStore from '@/store/user';
 import useLoadingStore from "@/store/loading";
+import useStyleStore from '@/store/style';
 import { storeToRefs } from 'pinia';
 import { removeRoutes } from '@/router';
+import screenfull from 'screenfull';
 const router = useRouter()
 const routerStore = useRouterStore();
 const menuStore = useMenuStore();
 const userInfoStore = useUserStore();
 const loadingStore = useLoadingStore();
+const styleStore = useStyleStore();
 const { collapseTF } = storeToRefs(menuStore);
 const { userInfo } = storeToRefs(userInfoStore);
 
@@ -322,6 +404,21 @@ const breadcrumbPath = computed(() => {
   })
   return result;
 });
+
+// 全屏
+const fullScreenTF = ref(false);
+
+// 自定义主题
+const styleDialogFlag = ref(false)
+const NewStyleData = reactive({
+  asideBackgroundColor: '',
+  asideTextColor: '',
+  asideActiveTextColor: '',
+  headerBackgroundColor: '',
+  headerTextColor: '',
+  tabActiveTextColor: '',
+  mainBackgroundColor: '',
+})
 
 // 抽屉
 const drawerFlag = ref(false)
@@ -375,7 +472,7 @@ const UpdateUserPassword = reactive({
   secondPassword: ''
 })
 
-//表单校验规则
+//修改个人信息表单校验规则
 const firstRules = reactive<FormRules>({
   name: [
     { required: true, message: '请输入姓名', trigger: ['change'] }
@@ -400,6 +497,36 @@ const firstRules = reactive<FormRules>({
     { required: true, message: '请输入家庭住址', trigger: ['change'] }
   ],
 })
+
+// 打开自定义主题窗口
+const openStyleDialog = () => {
+  styleDialogFlag.value = true;
+  // nextTick(() => {
+  NewStyleData.asideBackgroundColor = styleStore.asideBackgroundColor;
+  NewStyleData.asideTextColor = styleStore.asideTextColor;
+  NewStyleData.asideActiveTextColor = styleStore.asideActiveTextColor;
+  NewStyleData.headerBackgroundColor = styleStore.headerBackgroundColor;
+  NewStyleData.headerTextColor = styleStore.headerTextColor;
+  NewStyleData.tabActiveTextColor = styleStore.tabActiveTextColor;
+  NewStyleData.mainBackgroundColor = styleStore.mainBackgroundColor;
+  // })
+  // styleStore.setDefaultStyle();
+}
+
+// 关闭自定义主题窗口
+const closeStyleDialog = () => {
+  styleDialogFlag.value = false;
+}
+
+// 改变全屏状态
+const changeFullScreen = () => {
+  if (fullScreenTF.value) {
+    screenfull.exit();
+  } else {
+    console.log(screenfull.isEnabled);
+    screenfull.toggle(document.getElementById("myFullScreenContainer"));
+  }
+}
 
 //退出
 const loginOut = () => {
@@ -790,12 +917,16 @@ const closePasswordDialog = () => {
 .header-layout {
   display: flex;
   justify-content: space-between;
-  font-size: $defaultFontSize;
+  font-size: $DefaultFontSize;
 
-  .header-layout-icon {
+  .header-layout-icon-group {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .header-layout-icon {
+      margin: 0 0.2vw;
+    }
   }
 
   .header-layout-breadcrumb {
@@ -803,6 +934,16 @@ const closePasswordDialog = () => {
     justify-content: center;
     align-items: center;
     margin-left: 1vw;
+
+    .header-layout-breadcrumb-item {
+      font-size: $SecondFontSize;
+      font-weight: bolder;
+    }
+  }
+
+  .header-layout-title {
+    font-size: $SecondFontSize;
+    font-weight: bolder;
   }
 
   .avatar-group {

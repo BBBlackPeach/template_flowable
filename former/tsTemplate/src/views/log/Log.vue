@@ -10,7 +10,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" :data="firstTableData" style="width: 98%;height: 65vh;" :border="true" stripe
+        <el-table class="tableGroup" :data="firstTableData" style="width: 98%;height: 83.5%;" :border="true" stripe
             highlight-current-row>
             <el-table-column property="userName" align="center" label="操作人" width="100" />
             <el-table-column property="method" align="center" label="请求方法" width="450" />

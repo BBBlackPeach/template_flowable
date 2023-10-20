@@ -2,7 +2,8 @@
   <div>
     <el-scrollbar>
       <el-menu :uniqueOpened="true" :default-active="currentTab" :collapse="collapseTF" class="el-menu-vertical"
-        background-color="#3c5de3" text-color="#fff" active-text-color="#FFE14D" router>
+        :background-color="styleStore.asideBackgroundColor" :text-color="styleStore.asideTextColor"
+        :active-text-color="styleStore.asideActiveTextColor" router>
         <!-- background-color="#191A23" text-color="#fff" active-text-color="#1890FF" router> -->
         <!-- background-color="#1F6761" text-color="#fff" active-text-color="#1890FF" router> -->
         <template v-for="(menu, index) in routerList" :key="index">
@@ -38,9 +39,11 @@
 <script setup lang="ts">
 import useMenuStore from '@/store/menu';
 import useRouterStore from '@/store/router';
+import useStyleStore from '@/store/style';
 import { storeToRefs } from 'pinia';
 const menuStore = useMenuStore();
 const routerStore = useRouterStore();
+const styleStore = useStyleStore();
 
 const { currentTab } = storeToRefs(menuStore);
 const { collapseTF } = storeToRefs(menuStore);

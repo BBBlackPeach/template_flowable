@@ -1,8 +1,17 @@
 <template>
-  <div class="router-history">
+  <div class="router-history" :style="`background-color: ${styleStore.headerBackgroundColor}`">
     <el-tabs v-model="currentTab" type="card" closable @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane v-for="(item, index) in tabs" :key="index" :label="item.name" :name="item.name">
         <template #label>
+          <span :style="{
+            color: currentTab == item.name ? styleStore.tabActiveTextColor : styleStore.headerTextColor,
+          }"><i class="point" :style="{
+  backgroundColor:
+    currentTab == item.name ? styleStore.tabActiveTextColor : '#ddd',
+}" />
+            {{ item.name }}</span>
+        </template>
+        <!-- <template #label>
           <span :style="{
             color: currentTab == item.name ? '#1890ff' : '#333',
           }"><i class="point" :style="{
@@ -10,7 +19,7 @@
     currentTab == item.name ? '#1890ff' : '#ddd',
 }" />
             {{ item.name }}</span>
-        </template>
+        </template> -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -18,9 +27,11 @@
 
 <script setup lang="ts">
 import useMenuStore from '@/store/menu';
+import useStyleStore from '@/store/style';
 import { storeToRefs } from 'pinia';
 const router = useRouter();
 const menuStore = useMenuStore();
+const styleStore = useStyleStore();
 
 // 在状态管理中对象因此取值不同于下面
 const tabs = menuStore.tabs;
@@ -65,11 +76,11 @@ onMounted(() => {
 <style lang="scss">
 .router-history {
   // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-  background: #fff;
+  // background: #ffffff;
   padding: 0;
   border-top: 1px solid #f4f4f4;
   height: 40px;
-  font-size: $defaultFontSize;
+  font-size: $DefaultFontSize;
 
   .el-tabs__header .el-tabs__item {
     border: none;

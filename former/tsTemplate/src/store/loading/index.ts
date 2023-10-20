@@ -36,7 +36,7 @@ const useLoadingStore = defineStore('useLoadingStore', () => {
     // }, 
     {
         persist: {
-            key: 'userInfo',
+            key: 'loadingInfo',
             storage: useLoadingSt
         }
     }

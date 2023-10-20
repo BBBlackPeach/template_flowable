@@ -1,13 +1,13 @@
 <template>
   <div class="footer-layout">
     <div>
-      <span>版权所有：后台管理系统开发模板</span>
+      <div>版权所有：后台管理系统开发模板</div>
       <el-divider direction="vertical" />
-      <span>京ICP备：XXXXXXX-X号</span>
+      <div>京ICP备：XXXXXXX-X号</div>
       <el-divider direction="vertical" />
-      <span>
+      <div>
         <a href="#">京公网安备XXXXXXXXXXXXXX号</a>
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -18,9 +18,9 @@
 <style lang="scss" scoped>
 .footer-layout {
   color: #888;
-  height: 3vh;
+  height: 3%;
   margin-top: 0.3rem;
-  font-size: $defaultFontSize;
+  font-size: $SecondFontSize;
 
   a {
     color: #888;
@@ -34,7 +34,7 @@
       height: 2.5vh;
     }
 
-    // span {
+    // div {
     // margin: 0 1vh;
     // }
   }

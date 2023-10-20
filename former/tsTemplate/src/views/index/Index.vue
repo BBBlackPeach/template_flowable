@@ -106,8 +106,6 @@ const toTarget = (name) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/style/common.scss";
-
 .layout {
     .card {
         overflow: hidden;
