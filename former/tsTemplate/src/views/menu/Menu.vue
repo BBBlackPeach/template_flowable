@@ -9,7 +9,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" row-key="id" :data="firstTableData" style="width: 98%;height: 88%;" :border="true"
+        <el-table class="tableGroup" row-key="id" :data="firstTableData" style="width: 98%;height: 84%;" :border="true"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" stripe highlight-current-row>
             <el-table-column property="name" align="center" label="菜单名称" />
             <el-table-column align="center" label="类型" width="80">

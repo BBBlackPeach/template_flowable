@@ -20,7 +20,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 82.5%;" :border="true"
+        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 78%;" :border="true"
             highlight-current-row>
             <el-table-column property="nickName" align="center" label="姓名" width="100" />
             <el-table-column property="name" align="center" label="用户名" width="100" />
