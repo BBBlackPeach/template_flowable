@@ -137,6 +137,11 @@ const loginForm = reactive({
     rememberFlag: true,
 })
 
+const loginRequestParam = reactive({
+    username: '',
+    password: '',
+})
+
 
 const forgetDialogFlag = ref(false)
 const activeStep = ref(1)
@@ -163,11 +168,12 @@ const login = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate(async (valid, fields) => {
         if (valid) {
             setLoadingT()
-            loginForm.password = asc.encrypt(loginForm.password) // asc加密
-            loginApi(loginForm).then(async res => {
+            loginRequestParam.username = loginForm.username;
+            loginRequestParam.password = asc.encrypt(loginForm.password) // asc加密
+            loginApi(loginRequestParam).then(async res => {
                 if (res && res.code == 200 && res.data != 0) {
                     if (loginForm.rememberFlag) {
-                        setCookie(loginForm.username, loginForm.password, 7)
+                        setCookie(loginRequestParam.username, loginRequestParam.password, 7)
                     } else {
                         setCookie('', '', -1)
                     }
@@ -175,17 +181,17 @@ const login = async (formEl1: FormInstance | undefined) => {
                     userStore.setToken(res.data.token)
 
                     // 再次发请求，但是发请求之前，要带上token
-                    let navTree = await getMenuTreeApi(loginForm.username);
+                    let navTree = await getMenuTreeApi(loginRequestParam.username);
                     setRoutes(navTree.data);
                     routerStore.setRouterList(navTree.data);
                     console.log("用户菜单", navTree.data);
 
-                    let perms = await getPermissions(loginForm.username)
+                    let perms = await getPermissions(loginRequestParam.username)
                     console.log("用户权限", perms.data)
                     userStore.setPermissions(perms.data)
 
                     //获取登录人的信息 登陆成功通过username返回user信息
-                    let user = await getUserByNickApi(loginForm.username)
+                    let user = await getUserByNickApi(loginRequestParam.username)
                     console.log("获取用户信息", user.data)
                     const userInfo = {
                         userId: user.data.id,

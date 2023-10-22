@@ -46,7 +46,22 @@
             <el-table-column property="createBy" align="center" label="创建者" /> -->
             <el-table-column align="center" width="200" fixed="right">
                 <template #header>
-                    <el-dropdown trigger="click" :hide-on-click="false">
+                    <el-popover placement="bottom" popper-class="column-popover" :width="200" trigger="click">
+                        <template #reference>
+                            <span>
+                                操作
+                                <el-icon>
+                                    <ArrowDownBold />
+                                </el-icon>
+                            </span>
+                        </template>
+                        <el-checkbox v-model="showAllColumnFlag" :indeterminate="isIndeterminate"
+                            @change="handleCheckAllChange">全选</el-checkbox>
+                        <el-divider />
+                        <el-checkbox class="column-checkgroup-item" v-for="(item) in tableColumnOptions"
+                            v-model="item.isShow" :label="item.title" :key="item.title" />
+                    </el-popover>
+                    <!-- <el-dropdown trigger="click" :hide-on-click="false">
                         <span>
                             操作
                             <el-icon>
@@ -55,32 +70,15 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>Action 1</el-dropdown-item>
-                                <el-dropdown-item>Action 2</el-dropdown-item>
-                                <el-dropdown-item>Action 3</el-dropdown-item>
-                                <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                                <el-dropdown-item divided>Action 5</el-dropdown-item>
+                                <el-dropdown-item class="centerCommon" @click.native="resect">
+                                    <el-checkbox v-model="showAllColumnFlag" border :indeterminate="isIndeterminate"
+                                        @change="handleCheckAllChange">全选</el-checkbox>
+                                </el-dropdown-item>
+                                <el-dropdown-item v-for="(item) in tableColumnOptions">
+                                    <el-checkbox :v-model="item.isShow" :label="item.title" :key="item.title" />
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
-                    </el-dropdown>
-                    <!-- <el-dropdown>
-                        <span class="el-dropdown-link">
-                            操作
-                            <el-icon class="el-icon--right">
-                                <ArrowDownBold />
-                            </el-icon>
-                        </span>
-                        <el-dropdown-menu #dropdown> -->
-                    <!-- 作用是数据过多把表单数据的整体高度固定、多出的区域可以下拉展示 -->
-                    <!-- <el-scrollbar style="min-height: 20vh">
-                                </el-scrollbar> -->
-                    <!-- <el-checkbox-group v-model="colOptions">
-                                <el-dropdown-item @click.native="resect">重置</el-dropdown-item>
-                                <el-dropdown-item divided v-for="(item, index) in colSelectArr" :key="index">
-                                    <el-checkbox :label="item" :key="item"></el-checkbox>
-                                </el-dropdown-item>
-                            </el-checkbox-group>
-                        </el-dropdown-menu>
                     </el-dropdown> -->
                 </template>
                 <template #default="scope">
@@ -388,17 +386,36 @@ const UpdateUserData = reactive({
 //     createTime: '',
 //     createBy: '',
 // })
-
-const colData = ref([
-    { title: "日期", istrue: true },
-    { title: "姓名", istrue: true },
-    { title: "性别", istrue: true },
-    { title: "年龄", istrue: true },
-    { title: "时间", istrue: true },
-    { title: "地址", istrue: true }
+const showAllColumnFlag = ref(true)
+const tableColumnOptions = ref([
+    { title: "姓名", isShow: true },
+    { title: "用户名", isShow: true },
+    { title: "性别", isShow: true },
+    { title: "年龄", isShow: true },
+    { title: "手机号", isShow: true },
+    { title: "身份证号", isShow: true },
+    { title: "家庭住址", isShow: true },
+    { title: "头像", isShow: true }
 ])
-const colOptions = ref([])//默认全选
-const colSelectArr = ref([])
+// 选中与半选的状态控制, 条件就是 当前选中的数据个数大于0 且 小于所有列的总数
+const isIndeterminate = computed<boolean>(() => {
+    const showColumnArray = tableColumnOptions.value.filter((item) => {
+        return item.isShow == true
+    });
+    return showColumnArray.length > 0 && showColumnArray.length < tableColumnOptions.value.length
+})
+// 全选与否的事件控制器
+const handleCheckAllChange = (boolean: any) => {
+    if (boolean) { // 全选 
+        for (let i = 0; i < tableColumnOptions.value.length; i++) {
+            tableColumnOptions.value[i].isShow = true;
+        }
+    } else { // 全不选
+        for (let i = 0; i < tableColumnOptions.value.length; i++) {
+            tableColumnOptions.value[i].isShow = false;
+        }
+    }
+}
 
 //表单校验规则
 const firstRules = reactive<FormRules>({
@@ -841,5 +858,18 @@ const UpdateReturnTop = () => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.column-popover {
+    max-height: 330px;
+    overflow-y: auto;
+
+    .el-divider--horizontal {
+        margin: 10px 0;
+    }
+
+    .column-checkgroup-item {
+        width: 100%;
+    }
+}
+</style>
 
