@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container flx-center" v-loading="loadingTF">
+    <div class="login-container" v-loading="loadingTF">
         <div class="login-box">
             <div class="login-left">
                 <div class="title">后台管理系统开发模板</div>
@@ -28,15 +28,17 @@
                         <SlidingVerify ref="slidingVerify" :status="loginForm.verifyStatus" :successFun="onVerifySuccess"
                             :errorFun="onVerifyError"></SlidingVerify>
                     </el-form-item>
-                    <el-row class="flx-row">
-                        <el-col :span="20">
-                            <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="default" />
+                    <el-row class="flx-row" justify="space-between">
+                        <el-col :span="12">
+                            <el-checkbox style="flex: 1" v-model="loginForm.rememberFlag" label="记住密码" size="default" />
                         </el-col>
-                        <el-col class="flx-col" :span="4" @click="openForgetDialog">
-                            忘记密码?
+                        <el-col class="flx-col" :span="12" @click="openForgetDialog">
+                            <div>
+                                忘记密码?
+                            </div>
                         </el-col>
                     </el-row>
-                    <!-- <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="large" />
+                    <!-- <el-checkbox style="flex: 1" v-model="loginForm.rememberFlag" label="记住密码" size="large" />
                       <span>忘记密码？</span> -->
                 </el-form>
 
@@ -112,7 +114,6 @@
 </template>
 
 <script setup lang="ts">
-import { Base64 } from 'js-base64'
 import { UserFilled, Lock, User, CircleClose } from '@element-plus/icons-vue'
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
 import useUserStore from '@/store/user';
@@ -121,6 +122,7 @@ import { loginApi, checkUserNameApi, checkUserInfoApi, updatePasswordApi } from 
 import { getMenuTreeApi } from '@/api/menu'
 import { getUserByNickApi, getPermissions } from '@/api/user'
 import { setRoutes } from '@/router';
+import asc from '@/utils/asc'
 const userStore = useUserStore()
 const routerStore = useRouterStore()
 const router = useRouter()
@@ -132,7 +134,7 @@ const loginForm = reactive({
     username: '',
     password: '',
     verifyStatus: null,
-    checked: true,
+    rememberFlag: true,
 })
 
 
@@ -161,11 +163,11 @@ const login = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate(async (valid, fields) => {
         if (valid) {
             setLoadingT()
+            loginForm.password = asc.encrypt(loginForm.password) // asc加密
             loginApi(loginForm).then(async res => {
                 if (res && res.code == 200 && res.data != 0) {
-                    if (loginForm.checked) {
-                        let password = Base64.encode(loginForm.password) // base64加密
-                        setCookie(loginForm.username, password, 7)
+                    if (loginForm.rememberFlag) {
+                        setCookie(loginForm.username, loginForm.password, 7)
                     } else {
                         setCookie('', '', -1)
                     }
@@ -252,8 +254,8 @@ const getCookie = () => {
             if (arr2[0] === 'userId') {
                 loginForm.username = arr2[1]
             } else if (arr2[0] === 'password') {
-                loginForm.password = Base64.decode(arr2[1]) // base64解密
-                loginForm.checked = true
+                loginForm.password = asc.decrypt(arr2[1]) // asc解密
+                loginForm.rememberFlag = true
             }
         }
     }
@@ -405,7 +407,7 @@ const closeForgetDialog = () => {
         height: 92%;
         background-color: hsla(0, 0%, 100%, 0.85);
         border-radius: 10px;
-        padding: 0 8% 0 50px;
+        padding: 0 8% 0 8%;
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -413,11 +415,10 @@ const closeForgetDialog = () => {
 
         .login-left {
             width: 50vw;
-            // width: 800px;
             color: #6E736FFF;
 
             .title {
-                font-size: 5vh;
+                font-size: 2.4vw;
                 font-weight: 400;
                 letter-spacing: 0px;
                 color: rgba(47, 57, 78, 1);
@@ -425,12 +426,13 @@ const closeForgetDialog = () => {
             }
 
             .sub {
-                font-size: 2vh;
+                font-size: 1.1vw;
             }
 
             img {
                 width: 46vw;
                 height: 50vh;
+                // height: 50%;
                 // height: 465px;
             }
         }
@@ -438,6 +440,7 @@ const closeForgetDialog = () => {
         .login-form {
             width: 24.5vw;
             height: 60vh;
+            // height: 66%;
             padding: 1vh 3vw 4vh 3vw;
             border-radius: 10px;
             -webkit-box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
@@ -457,25 +460,23 @@ const closeForgetDialog = () => {
 
                 .logo-text {
                     font-weight: bold;
-                    font-size: 3.6vh;
-                    // font-size: 32px;
+                    font-size: 1.8vw;
                     padding-left: 5px;
-                    margin-top: 9vh;
-                    // margin-top: 80px;
-                    // margin-top: 10px;
-                    margin-bottom: 2.2vh;
+                    margin-top: 11vh;
+                    // margin-top: 27%;
                     white-space: nowrap;
                     color: #2d51e6;
                 }
             }
 
             .flx-row {
-                font-size: 1.7vh;
+                font-size: 14px;
                 // color: #3c5de3;
                 color: #2d51e6;
 
                 .flx-col {
                     display: flex;
+                    flex-direction: row-reverse;
                     align-items: center;
                     cursor: pointer;
                 }

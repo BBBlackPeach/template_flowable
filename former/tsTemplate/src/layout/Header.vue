@@ -25,15 +25,19 @@
       <div class="header-layout-title">后台管理系统开发模板</div>
     </div>
     <div class="avatar-group">
-      <div class="header-layout-icon-group" style="margin-right: 0.8rem;">
-        <el-icon class="header-layout-icon" size="26" @click="openStyleDialog">
-          <Brush />
-        </el-icon>
-        <el-icon class="header-layout-icon" v-if="fullScreenTF" size="26" @click="changeFullScreen">
+      <div class="header-layout-icon-group" style="margin-right: 0.4vw;">
+        <!-- 此处用于切换全屏，但本系统设置全屏后无法查看到头部，因此可注释 -->
+        <!-- <el-icon class="header-layout-icon" v-if="fullScreenTF" size="26" @click="changeFullScreen">
           <TopRight />
         </el-icon>
         <el-icon class="header-layout-icon" v-else size="26" @click="changeFullScreen">
           <FullScreen />
+        </el-icon> -->
+        <el-icon class="header-layout-icon" size="26" @click="changeFullScreen">
+          <FullScreen />
+        </el-icon>
+        <el-icon class="header-layout-icon" size="28" @click="openStyleDialog">
+          <SetUp />
         </el-icon>
       </div>
       <span v-for="role, index in userInfo.roleNames">
@@ -151,59 +155,90 @@
       <el-row justify="center">
         <el-col :span="10">
           <el-form-item label="菜单栏背景颜色">
-            <el-color-picker v-model="NewStyleData.asideBackgroundColor" size="large"
-              :change="styleStore.setAsideBackgroundColor(NewStyleData.asideBackgroundColor)" />
+            <el-color-picker v-model="styleStore.asideBackgroundColor" show-alpha size="large"
+              @active-change="styleStore.setAsideBackgroundColor" />
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="头部背景颜色">
-            <el-color-picker v-model="NewStyleData.headerBackgroundColor" size="large"
-              :change="styleStore.setHeaderBackgroundColor(NewStyleData.headerBackgroundColor)" />
+            <el-color-picker v-model="styleStore.headerBackgroundColor" show-alpha size="large"
+              @active-change="styleStore.setHeaderBackgroundColor" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row justify="center">
         <el-col :span="10">
           <el-form-item label="菜单栏字体颜色">
-            <el-color-picker v-model="NewStyleData.asideTextColor" size="large"
-              :change="styleStore.setAsideTextColor(NewStyleData.asideTextColor)" />
+            <el-color-picker v-model="styleStore.asideTextColor" show-alpha size="large"
+              @active-change="styleStore.setAsideTextColor" />
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="头部字体颜色">
-            <el-color-picker v-model="NewStyleData.headerTextColor" size="large"
-              :change="styleStore.setHeaderTextColor(NewStyleData.headerTextColor)" />
+            <el-color-picker v-model="styleStore.headerTextColor" show-alpha size="large"
+              @active-change="styleStore.setHeaderTextColor" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row justify="center">
         <el-col :span="10">
           <el-form-item label="菜单栏选中字体颜色">
-            <el-color-picker v-model="NewStyleData.asideActiveTextColor" size="large"
-              :change="styleStore.setAsideActiveTextColor(NewStyleData.asideActiveTextColor)" />
+            <el-color-picker v-model="styleStore.asideActiveTextColor" show-alpha size="large"
+              @active-change="styleStore.setAsideActiveTextColor" />
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="标签页被选中颜色">
-            <el-color-picker v-model="NewStyleData.tabActiveTextColor" size="large"
-              :change="styleStore.setTabActiveTextColor(NewStyleData.tabActiveTextColor)" />
+            <el-color-picker v-model="styleStore.tabActiveTextColor" show-alpha size="large"
+              @active-change="styleStore.setTabActiveTextColor" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row justify="center">
-        <el-col :span="20">
+        <el-col :span="10">
           <el-form-item label="内容页背景颜色">
-            <el-color-picker v-model="NewStyleData.mainBackgroundColor" size="large"
-              :change="styleStore.setMainBackgroundColor(NewStyleData.mainBackgroundColor)" />
+            <el-color-picker v-model="styleStore.mainBackgroundColor" show-alpha size="large"
+              @active-change="styleStore.setMainBackgroundColor" />
           </el-form-item>
         </el-col>
+        <el-col :span="10">
+          <el-form-item label="开启背景图">
+            <el-switch v-model="styleStore.backgroundImageFlag" size="large" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row justify="center" v-show="styleStore.backgroundImageFlag">
+        <el-col :span="20">
+          <el-tooltip placement="top">
+            <template #content>
+              <el-image style="width: 14vw; height: 16vh" fit="contain" :src="styleStore.globalBackgroundImageUrl"
+                @load="loadBgImageSuccess" @error="loadBgImageFail" />
+            </template>
+            <el-form-item label="背景图片URL">
+              <el-input v-model="styleStore.globalBackgroundImageUrl" type="textarea" :autosize="{ minRows: 2 }"
+                placeholder="请输入图片地址" @input="setBgImageFlagFalse" @blur="validateBgImage">
+              </el-input>
+            </el-form-item>
+          </el-tooltip>
+        </el-col>
+      </el-row>
+      <el-row justify="center">
+        <el-button type="primary" round @click="styleStore.setDefaultStyle">
+          默认主题
+        </el-button>
       </el-row>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="styleStore.setDefaultStyle">
-          默认主题
-        </el-button>
+        <el-row justify="center">
+          <el-button type="primary" @click="saveStyle">
+            保存
+          </el-button>
+          <el-button type="warning" @click="restoreStyle">
+            重置
+          </el-button>
+          <el-button @click="closeStyleDialog">取消</el-button>
+        </el-row>
       </span>
     </template>
   </el-dialog>
@@ -410,7 +445,8 @@ const fullScreenTF = ref(false);
 
 // 自定义主题
 const styleDialogFlag = ref(false)
-const NewStyleData = reactive({
+const bgImageUrlValidFlag = ref(false)
+const NowStyleData = {
   asideBackgroundColor: '',
   asideTextColor: '',
   asideActiveTextColor: '',
@@ -418,7 +454,9 @@ const NewStyleData = reactive({
   headerTextColor: '',
   tabActiveTextColor: '',
   mainBackgroundColor: '',
-})
+  backgroundImageFlag: false,
+  globalBackgroundImageUrl: ''
+}
 
 // 抽屉
 const drawerFlag = ref(false)
@@ -501,21 +539,77 @@ const firstRules = reactive<FormRules>({
 // 打开自定义主题窗口
 const openStyleDialog = () => {
   styleDialogFlag.value = true;
-  // nextTick(() => {
-  NewStyleData.asideBackgroundColor = styleStore.asideBackgroundColor;
-  NewStyleData.asideTextColor = styleStore.asideTextColor;
-  NewStyleData.asideActiveTextColor = styleStore.asideActiveTextColor;
-  NewStyleData.headerBackgroundColor = styleStore.headerBackgroundColor;
-  NewStyleData.headerTextColor = styleStore.headerTextColor;
-  NewStyleData.tabActiveTextColor = styleStore.tabActiveTextColor;
-  NewStyleData.mainBackgroundColor = styleStore.mainBackgroundColor;
-  // })
-  // styleStore.setDefaultStyle();
+  // 使用String()取消响应式
+  NowStyleData.asideBackgroundColor = String(styleStore.asideBackgroundColor);
+  NowStyleData.asideTextColor = String(styleStore.asideTextColor);
+  NowStyleData.asideActiveTextColor = String(styleStore.asideActiveTextColor);
+  NowStyleData.headerBackgroundColor = String(styleStore.headerBackgroundColor);
+  NowStyleData.headerTextColor = String(styleStore.headerTextColor);
+  NowStyleData.tabActiveTextColor = String(styleStore.tabActiveTextColor);
+  NowStyleData.mainBackgroundColor = String(styleStore.mainBackgroundColor);
+  NowStyleData.backgroundImageFlag = styleStore.backgroundImageFlag;
+  NowStyleData.globalBackgroundImageUrl = String(styleStore.globalBackgroundImageUrl);
+}
+
+// 自定义背景图片加载成功
+const loadBgImageSuccess = () => {
+  bgImageUrlValidFlag.value = true;
+}
+
+// 自定义背景图片加载失败（由于输入时默认失败，此处可删）
+const loadBgImageFail = () => {
+  bgImageUrlValidFlag.value = false;
+}
+
+// 由于图片请求有时延，输入URL时默认失败，直到图片成功加载
+const setBgImageFlagFalse = () => {
+  bgImageUrlValidFlag.value = false;
+}
+
+// 验证是否加载成功
+const validateBgImage = () => {
+  if (!bgImageUrlValidFlag.value) {
+    ElMessage({
+      message: '图片地址不合法！',
+      type: 'error'
+    })
+    styleStore.setGlobalBackgroundImageUrl(NowStyleData.globalBackgroundImageUrl);
+  }
+}
+
+// 保存
+const saveStyle = () => {
+  styleDialogFlag.value = false;
+  // 实际存储值已修改，此处选择保存，因此只需关闭窗口
+}
+
+// 还原
+const restoreStyle = () => {
+  // 实际存储值已修改，此处还原成刚打开窗口时的风格
+  styleStore.setAsideBackgroundColor(NowStyleData.asideBackgroundColor);
+  styleStore.setAsideTextColor(NowStyleData.asideTextColor);
+  styleStore.setAsideActiveTextColor(NowStyleData.asideActiveTextColor);
+  styleStore.setHeaderBackgroundColor(NowStyleData.headerBackgroundColor);
+  styleStore.setHeaderTextColor(NowStyleData.headerTextColor);
+  styleStore.setTabActiveTextColor(NowStyleData.tabActiveTextColor);
+  styleStore.setMainBackgroundColor(NowStyleData.mainBackgroundColor);
+  styleStore.setBackgroundImageFlag(NowStyleData.backgroundImageFlag);
+  styleStore.setGlobalBackgroundImageUrl(NowStyleData.globalBackgroundImageUrl);
 }
 
 // 关闭自定义主题窗口
 const closeStyleDialog = () => {
   styleDialogFlag.value = false;
+  // 实际存储值已修改，此处选择不保存，因此需要还原先前数据
+  styleStore.setAsideBackgroundColor(NowStyleData.asideBackgroundColor);
+  styleStore.setAsideTextColor(NowStyleData.asideTextColor);
+  styleStore.setAsideActiveTextColor(NowStyleData.asideActiveTextColor);
+  styleStore.setHeaderBackgroundColor(NowStyleData.headerBackgroundColor);
+  styleStore.setHeaderTextColor(NowStyleData.headerTextColor);
+  styleStore.setTabActiveTextColor(NowStyleData.tabActiveTextColor);
+  styleStore.setMainBackgroundColor(NowStyleData.mainBackgroundColor);
+  styleStore.setBackgroundImageFlag(NowStyleData.backgroundImageFlag);
+  styleStore.setGlobalBackgroundImageUrl(NowStyleData.globalBackgroundImageUrl);
 }
 
 // 改变全屏状态

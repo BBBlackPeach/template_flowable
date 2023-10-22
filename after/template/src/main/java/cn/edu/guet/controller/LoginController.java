@@ -1,12 +1,13 @@
 package cn.edu.guet.controller;
 
 
-import cn.edu.guet.bean.LoginBean;
+import cn.edu.guet.bean.util.LoginFormParm;
 import cn.edu.guet.bean.SysUser;
 import cn.edu.guet.bean.util.ForgetFormParm;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.security.JwtAuthenticationToken;
 import cn.edu.guet.service.SysUserService;
+import cn.edu.guet.util.AscUtils;
 import cn.edu.guet.util.PasswordUtils;
 import cn.edu.guet.util.SecurityUtils;
 import lombok.AllArgsConstructor;
@@ -32,9 +33,9 @@ public class LoginController {
 
     @PostMapping("/login")
 //    public HttpResult login(String username, String password, HttpServletRequest request) {
-    public HttpResult login(@RequestBody LoginBean loginBean, HttpServletRequest request) {
-        String username = loginBean.getUsername();
-        String password = loginBean.getPassword();
+    public HttpResult login(@RequestBody LoginFormParm loginFormParm, HttpServletRequest request) {
+        String username = loginFormParm.getUsername();
+        String password = AscUtils.desEncrypt(loginFormParm.getPassword(),AscUtils.KEY,AscUtils.IV);
         // System.out.println(username);
         // System.out.println(password);
         // 用户信息

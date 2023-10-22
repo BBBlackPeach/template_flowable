@@ -1,4 +1,4 @@
-package cn.edu.guet.bean;
+package cn.edu.guet.bean.util;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author 陶祎祎
  */
 @Data
-public class LoginBean {
+public class LoginFormParm {
     /**
      * username  用户名
      */

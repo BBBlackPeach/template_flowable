@@ -55,6 +55,12 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <!--asc工具-->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.60</version>
+        </dependency>
         <!--mybatis-Plus-->
         <dependency>
             <groupId>com.baomidou</groupId>

@@ -14,7 +14,6 @@
     "crypto-js": "^4.1.1",
     "echarts": "^5.4.1",
     "element-plus": "^2.2.29",
-    "js-base64": "^3.7.4",
     "pinia": "^2.0.30",
     "pinia-plugin-persistedstate": "^3.0.2",
     "screenfull": "^6.0.2",

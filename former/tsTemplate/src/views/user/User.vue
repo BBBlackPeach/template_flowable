@@ -44,7 +44,45 @@
             <!-- <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" /> -->
-            <el-table-column align="center" label="操作" width="200" fixed="right">
+            <el-table-column align="center" width="200" fixed="right">
+                <template #header>
+                    <el-dropdown trigger="click" :hide-on-click="false">
+                        <span>
+                            操作
+                            <el-icon>
+                                <ArrowDownBold />
+                            </el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>Action 1</el-dropdown-item>
+                                <el-dropdown-item>Action 2</el-dropdown-item>
+                                <el-dropdown-item>Action 3</el-dropdown-item>
+                                <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                                <el-dropdown-item divided>Action 5</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                    <!-- <el-dropdown>
+                        <span class="el-dropdown-link">
+                            操作
+                            <el-icon class="el-icon--right">
+                                <ArrowDownBold />
+                            </el-icon>
+                        </span>
+                        <el-dropdown-menu #dropdown> -->
+                    <!-- 作用是数据过多把表单数据的整体高度固定、多出的区域可以下拉展示 -->
+                    <!-- <el-scrollbar style="min-height: 20vh">
+                                </el-scrollbar> -->
+                    <!-- <el-checkbox-group v-model="colOptions">
+                                <el-dropdown-item @click.native="resect">重置</el-dropdown-item>
+                                <el-dropdown-item divided v-for="(item, index) in colSelectArr" :key="index">
+                                    <el-checkbox :label="item" :key="item"></el-checkbox>
+                                </el-dropdown-item>
+                            </el-checkbox-group>
+                        </el-dropdown-menu>
+                    </el-dropdown> -->
+                </template>
                 <template #default="scope">
                     <el-button v-perms="['sys:user:update']" :icon="Edit" size="default" type="primary"
                         @click="openUpdateDialog(scope.row)">
@@ -351,6 +389,16 @@ const UpdateUserData = reactive({
 //     createBy: '',
 // })
 
+const colData = ref([
+    { title: "日期", istrue: true },
+    { title: "姓名", istrue: true },
+    { title: "性别", istrue: true },
+    { title: "年龄", istrue: true },
+    { title: "时间", istrue: true },
+    { title: "地址", istrue: true }
+])
+const colOptions = ref([])//默认全选
+const colSelectArr = ref([])
 
 //表单校验规则
 const firstRules = reactive<FormRules>({

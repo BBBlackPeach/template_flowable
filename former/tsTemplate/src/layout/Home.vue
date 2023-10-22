@@ -1,27 +1,31 @@
 <template>
-    <el-container v-loading="loadingTF" element-loading-text="加载中..." :element-loading-spinner="svg"
-        element-loading-svg-view-box="-10, -10, 50, 50">
-        <el-aside style="width: auto !important">
-            <Aside></Aside>
-        </el-aside>
-        <el-container>
-            <el-header :style="`background-color: ${styleStore.headerBackgroundColor}`">
-                <Header></Header>
-            </el-header>
-            <Tabs></Tabs>
-            <el-main id="myFullScreenContainer" :style="`background-color: ${styleStore.mainBackgroundColor}`">
-                <router-view v-slot="{ Component }">
-                    <transition :duration="{ enter: 500, leave: 80 }" mode="out-in" name="el-fade-in-linear">
-                        <!-- 保持存活，缺点为有缓存，因此有时不为最新数据 -->
-                        <!-- <keep-alive> -->
-                        <component :is="Component" />
-                        <!-- </keep-alive> -->
-                    </transition>
-                </router-view>
-                <Footer></Footer>
-            </el-main>
+    <!-- 全屏背景图 -->
+    <div class="backgroundSetting"
+        :style="{ backgroundImage: 'url(' + (styleStore.backgroundImageFlag ? styleStore.globalBackgroundImageUrl : '') + ')' }">
+        <el-container :class="(styleStore.backgroundImageFlag ? 'opacitySetting' : '')" v-loading="loadingTF"
+            element-loading-text="加载中..." :element-loading-spinner="svg" element-loading-svg-view-box="-10, -10, 50, 50">
+            <el-aside style="width: auto !important">
+                <Aside></Aside>
+            </el-aside>
+            <el-container>
+                <el-header :style="`background-color: ${styleStore.headerBackgroundColor}`">
+                    <Header></Header>
+                </el-header>
+                <Tabs></Tabs>
+                <el-main id="myFullScreenContainer" :style="`background-color: ${styleStore.mainBackgroundColor}`">
+                    <router-view v-slot="{ Component }">
+                        <transition :duration="{ enter: 500, leave: 80 }" mode="out-in" name="el-fade-in-linear">
+                            <!-- 保持存活，缺点为有缓存，因此有时不为最新数据 -->
+                            <!-- <keep-alive> -->
+                            <component :is="Component" />
+                            <!-- </keep-alive> -->
+                        </transition>
+                    </router-view>
+                    <Footer></Footer>
+                </el-main>
+            </el-container>
         </el-container>
-    </el-container>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +54,21 @@ const svg = `
 </script>
 
 <style lang="scss" scoped>
+.backgroundSetting {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.opacitySetting {
+    // filter: alpha(Opacity=80);
+    // -moz-opacity: 0.80;
+    // opacity: 0.80;
+    filter: alpha(Opacity=85);
+    -moz-opacity: 0.85;
+    opacity: 0.85;
+}
+
 .el-header {
     // background-color: #ffffff;
     color: #333;

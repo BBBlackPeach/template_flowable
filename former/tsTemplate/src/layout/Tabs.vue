@@ -11,15 +11,6 @@
 }" />
             {{ item.name }}</span>
         </template>
-        <!-- <template #label>
-          <span :style="{
-            color: currentTab == item.name ? '#1890ff' : '#333',
-          }"><i class="point" :style="{
-  backgroundColor:
-    currentTab == item.name ? '#1890ff' : '#ddd',
-}" />
-            {{ item.name }}</span>
-        </template> -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -75,7 +66,7 @@ onMounted(() => {
 
 <style lang="scss">
 .router-history {
-  // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   // background: #ffffff;
   padding: 0;
   border-top: 1px solid #f4f4f4;

@@ -15,7 +15,7 @@
             <el-table-column align="center" label="类型" width="80">
                 <template #default="scope">
                     <el-tag v-if="scope.row.type == '0'" size="default">目录</el-tag>
-                    <el-tag v-if="scope.row.type == '1'" type="success" size="default">菜单</el-tag>
+                    <el-tag v-if="scope.row.type == '1'" type="warning" size="default">菜单</el-tag>
                     <el-tag v-if="scope.row.type == '2'" type="danger" size="default">按钮</el-tag>
                 </template>
             </el-table-column>
