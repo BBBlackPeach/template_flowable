@@ -17,7 +17,7 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 78%;" :border="true"
+        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 79%;" :border="true"
             highlight-current-row>
             <el-table-column property="name" align="center" label="角色名称" />
             <el-table-column property="remark" align="center" label="角色备注" />

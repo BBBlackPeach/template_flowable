@@ -20,16 +20,16 @@
         </div>
 
         <!-- 表格 -->
-        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 78%;" :border="true"
+        <el-table class="tableGroup" stripe :data="firstTableData" style="width: 98%;height: 79%;"
             highlight-current-row>
-            <el-table-column property="nickName" align="center" label="姓名" width="100" />
-            <el-table-column property="name" align="center" label="用户名" width="100" />
-            <el-table-column property="sex" align="center" label="性别" width="80" />
-            <el-table-column property="age" align="center" label="年龄" width="80" />
-            <el-table-column property="mobile" align="center" label="手机号" width="150" />
-            <el-table-column property="identity" align="center" label="身份证号" width="210" />
-            <el-table-column property="homeAddress" align="center" label="家庭住址" />
-            <el-table-column align="center" label="头像">
+            <el-table-column property="nickName" align="center" label="姓名" width="100" v-if="columnShowOptions[0].isShow==true"/>
+            <el-table-column property="name" align="center" label="用户名" width="100" v-if="columnShowOptions[1].isShow==true"/>
+            <el-table-column property="sex" align="center" label="性别" width="80" v-if="columnShowOptions[2].isShow==true"/>
+            <el-table-column property="age" align="center" label="年龄" width="80" v-if="columnShowOptions[3].isShow==true"/>
+            <el-table-column property="mobile" align="center" label="手机号" width="150" v-if="columnShowOptions[4].isShow==true"/>
+            <el-table-column property="identity" align="center" label="身份证号" width="210" v-if="columnShowOptions[5].isShow==true"/>
+            <el-table-column property="homeAddress" align="center" label="家庭住址" v-if="columnShowOptions[6].isShow==true"/>
+            <el-table-column align="center" label="头像" v-if="columnShowOptions[7].isShow==true">
                 <template #default="scope">
                     <el-image style="width: 9.2vh; height: 9.2vh"
                         :src="scope.row.avatar == '' || scope.row.avatar == null ? null : scope.row.avatar"
@@ -41,12 +41,12 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <!-- <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
-                width="105" />
-            <el-table-column property="createBy" align="center" label="创建者" /> -->
+            <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
+                width="90" v-if="columnShowOptions[8].isShow==true"/>
+            <el-table-column property="createBy" align="center" label="创建者" v-if="columnShowOptions[9].isShow==true"/>
             <el-table-column align="center" width="200" fixed="right">
                 <template #header>
-                    <el-popover placement="bottom" popper-class="column-popover" :width="200" trigger="click">
+                    <el-popover placement="bottom" popper-class="column-popover" :width="200" trigger="hover">
                         <template #reference>
                             <span>
                                 操作
@@ -55,31 +55,12 @@
                                 </el-icon>
                             </span>
                         </template>
-                        <el-checkbox v-model="showAllColumnFlag" :indeterminate="isIndeterminate"
+                        <el-checkbox class="column-checkgroup-item" v-model="showAllColumnFlag" :indeterminate="isIndeterminate"
                             @change="handleCheckAllChange">全选</el-checkbox>
                         <el-divider />
-                        <el-checkbox class="column-checkgroup-item" v-for="(item) in tableColumnOptions"
+                        <el-checkbox class="column-checkgroup-item" v-for="(item) in columnShowOptions"
                             v-model="item.isShow" :label="item.title" :key="item.title" />
                     </el-popover>
-                    <!-- <el-dropdown trigger="click" :hide-on-click="false">
-                        <span>
-                            操作
-                            <el-icon>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </span>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item class="centerCommon" @click.native="resect">
-                                    <el-checkbox v-model="showAllColumnFlag" border :indeterminate="isIndeterminate"
-                                        @change="handleCheckAllChange">全选</el-checkbox>
-                                </el-dropdown-item>
-                                <el-dropdown-item v-for="(item) in tableColumnOptions">
-                                    <el-checkbox :v-model="item.isShow" :label="item.title" :key="item.title" />
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown> -->
                 </template>
                 <template #default="scope">
                     <el-button v-perms="['sys:user:update']" :icon="Edit" size="default" type="primary"
@@ -387,7 +368,7 @@ const UpdateUserData = reactive({
 //     createBy: '',
 // })
 const showAllColumnFlag = ref(true)
-const tableColumnOptions = ref([
+const columnShowOptions = ref([
     { title: "姓名", isShow: true },
     { title: "用户名", isShow: true },
     { title: "性别", isShow: true },
@@ -395,24 +376,26 @@ const tableColumnOptions = ref([
     { title: "手机号", isShow: true },
     { title: "身份证号", isShow: true },
     { title: "家庭住址", isShow: true },
-    { title: "头像", isShow: true }
+    { title: "头像", isShow: true },
+    { title: "创建时间", isShow: true },
+    { title: "创建者", isShow: true },
 ])
 // 选中与半选的状态控制, 条件就是 当前选中的数据个数大于0 且 小于所有列的总数
 const isIndeterminate = computed<boolean>(() => {
-    const showColumnArray = tableColumnOptions.value.filter((item) => {
+    const showColumnArray = columnShowOptions.value.filter((item) => {
         return item.isShow == true
     });
-    return showColumnArray.length > 0 && showColumnArray.length < tableColumnOptions.value.length
+    return showColumnArray.length > 0 && showColumnArray.length < columnShowOptions.value.length
 })
 // 全选与否的事件控制器
 const handleCheckAllChange = (boolean: any) => {
     if (boolean) { // 全选 
-        for (let i = 0; i < tableColumnOptions.value.length; i++) {
-            tableColumnOptions.value[i].isShow = true;
+        for (let i = 0; i < columnShowOptions.value.length; i++) {
+            columnShowOptions.value[i].isShow = true;
         }
     } else { // 全不选
-        for (let i = 0; i < tableColumnOptions.value.length; i++) {
-            tableColumnOptions.value[i].isShow = false;
+        for (let i = 0; i < columnShowOptions.value.length; i++) {
+            columnShowOptions.value[i].isShow = false;
         }
     }
 }
