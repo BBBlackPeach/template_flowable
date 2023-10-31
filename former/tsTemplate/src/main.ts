@@ -12,7 +12,7 @@ import { createPinia } from 'pinia'
 // 持久化存储pinia
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { permission } from '@/directives/permission'
-
+import MyPD from '@/views/process/Process/index.js';
 
 //防止localStorage被篡改
 window.addEventListener('storage', (e: any) => {
@@ -51,6 +51,8 @@ app.use(createPinia().use(piniaPluginPersistedstate))
 
 // 自定义指令实现按钮权限封装
 app.directive("perms", permission)
+
+app.use(MyPD)
 
 app.use(router).mount('#app')
 

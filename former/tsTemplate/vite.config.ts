@@ -66,6 +66,12 @@ export default defineConfig({
         },
       }
     }
+  },
+  optimizeDeps: {
+    include: ['element-plus/lib/locale/lang/zh-cn',
+      'bpmn-js/lib/Modeler',
+      'bpmn-js-token-simulation'
+    ]
   }
   // 或
   // 打包
