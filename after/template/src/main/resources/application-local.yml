@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.77.28.123:3306/flowable?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+    username: root  #※※ 改成自己的 ※※
+    password: Zwy172839456,  #※※ 改成自己的 ※※
+    #应用名称
+    application:
+      name: after-template
+    #静态资源配置
+    #  mvc:
+    #    static-path-pattern: /static/**
+    #  web:
+    #    resources:
+    #      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:static
+    servlet:
+      multipart:
+        max-file-size: 1000MB
+        max-request-size: 1000MB
+    jackson:
+      time-zone: GMT+8

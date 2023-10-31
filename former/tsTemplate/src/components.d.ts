@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BpmnDesign: typeof import('./components/BpmnDesign.vue')['default']
+    BpmnNodePanel: typeof import('./components/BpmnNodePanel.vue')['default']
     BpTable: typeof import('./components/BpTable.vue')['default']
     CommonPanel: typeof import('./components/Process/panel/commonPanel.vue')['default']
     ConditionPanel: typeof import('./components/Process/panel/conditionPanel.vue')['default']
@@ -67,6 +68,7 @@ declare module '@vue/runtime-core' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     ExecutionListener: typeof import('./components/Process/panel/executionListener.vue')['default']
     FormPanel: typeof import('./components/Process/panel/formPanel.vue')['default']
+    LogicFlow: typeof import('./components/LogicFlow.vue')['default']
     MultiInstance: typeof import('./components/Process/panel/multiInstance.vue')['default']
     OtherPanel: typeof import('./components/Process/panel/otherPanel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,0 +1,9 @@
+
+${AnsiColor.BLUE}        _______         __     __ _ __     __ _
+${AnsiColor.BLUE}       |__   __|        \ \   / /(_)\ \   / /(_)
+${AnsiColor.BLUE}          | |  __ _   ___\ \_/ /  _  \ \_/ /  _
+${AnsiColor.BLUE}          | | / _` | / _ \\   /  | |  \   /  | |
+${AnsiColor.BLUE}          | || (_| || (_) || |   | |   | |   | |
+${AnsiColor.BLUE}          |_| \__,_| \___/ |_|   |_|   |_|   |_|
+
+:: 启动中，读取到的环境变量: ${AnsiColor.RED}${spring.profiles.active}${AnsiColor.BLUE} :: Running SpringBoot ${spring-boot.version}
