@@ -32,29 +32,23 @@ public class LoginController {
     private SysUserService sysUserService;
 
     @PostMapping("/login")
-//    public HttpResult login(String username, String password, HttpServletRequest request) {
     public HttpResult login(@RequestBody LoginFormParm loginFormParm, HttpServletRequest request) {
         String username = loginFormParm.getUsername();
         String password = AscUtils.desEncrypt(loginFormParm.getPassword(),AscUtils.KEY,AscUtils.IV);
-        // System.out.println(username);
-        // System.out.println(password);
         // 用户信息
         SysUser user = sysUserService.findByName(username);
 
-        System.out.println(user);
-        System.out.println(user);
-        System.out.println(user);
-
-        // 账号不存在、密码错误
+        // 账号不存在
         if (user == null) {
             return HttpResult.error("账号不存在");
         }
-        if (!PasswordUtils.matches(user.getSalt(), password, user.getPassword())) {
-            return HttpResult.error("密码不正确");
-        }
         // 账号锁定
         if (user.getStatus()==0) {
-            return HttpResult.error("该员工已离职,请联系管理员");
+            return HttpResult.error("该账号已锁定，请联系管理员处理");
+        }
+        // 密码错误
+        if (!PasswordUtils.matches(user.getSalt(), password, user.getPassword())) {
+            return HttpResult.error("用户名或密码错误");
         }
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);
